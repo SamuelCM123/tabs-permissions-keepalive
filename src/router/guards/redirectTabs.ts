@@ -29,8 +29,8 @@ export const redirectTabs = ( router: any ) => {
         }
 
         if(!to.meta?.isAlwaysOpen) {
-            // if(TabStore.openComponents.length === 0 && to.name !== 'dashboard') {
-            if(to.name !== 'dashboard') {
+            if(TabStore.openComponents.length === 0 && to.name !== 'dashboard') {
+            // if(to.name !== 'dashboard') {
                 return next({ name: 'dashboard' });
             }
         }

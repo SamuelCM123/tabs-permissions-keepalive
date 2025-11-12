@@ -246,6 +246,30 @@ export const useTabStore = defineStore('Tabs',() => {
 
     }
 
+    const handleLayoutRepeatFixed = async (name: any) => {
+
+        //? Almacena todas las rutas
+        let totalRoutes = [...openFixedComponents.value];
+        
+        //? Busca la pestaña
+        let moduleFind = await totalRoutes.find((route) => route.name == name);
+        
+        // ? Verifica si la pestaña esta oculta
+        // let isHiddenTab = await hiddenComponents.value.some((route: any) => route.name == name);
+
+        if(moduleFind){
+            console.log('moduleFind:',moduleFind);
+
+            //? Verifica si la pestaña esta oculta para desplazarla a las abiertas
+            // if(isHiddenTab) {
+            //     await handleLayoutHidden(moduleFind);
+            // }
+
+            return {...moduleFind};
+        }
+
+    }
+
     // TODO: Verificar si sera necesario integrar un handler para abrir Supermodules, modules and submodules
 
     /**
@@ -284,6 +308,33 @@ export const useTabStore = defineStore('Tabs',() => {
 
             //? Verificar si la pestaña es fija
             if(route.meta?.isAlwaysOpen){
+
+                //? Verificar si la pestaña se repite
+                if(!route.meta.isRepeat){
+                    
+                    //? Verificar si la pestaña se repite
+                    tabNumberRepeat = [...openFixedComponents.value].filter((tab: any) => route.name === tab.name);
+
+                    //? Busca la ruta repetida
+                    routeViewRepeat = await tabNumberRepeat.find((tab: any) => tab.name === route.name);
+
+                    // let routeViewRepeat = await componentsRepeat.value.hasOwnProperty(route.name);
+                    // console.log('routeViewRepeat:',routeViewRepeat);
+                    //? Verificar si se encontro la pestaña
+                    if(routeViewRepeat){
+                        layoutSelected.value = await handleLayoutRepeatFixed(route.name);
+            
+                        //? Redirige a la ruta seleccionada
+                        router.replace(
+                            {
+                                name: layoutSelected.value.name,
+                                // query: route.meta.isRepeat ? { tabId: configTab.id } : {},
+                                query: { tabId: configTab.id },
+                            }
+                        );
+                        return
+                    }
+                }
 
                 layoutSelected.value = configTab;
                 await openFixedComponents.value.unshift(configTab);
@@ -390,7 +441,7 @@ export const useTabStore = defineStore('Tabs',() => {
 
     // CRÍTICO: Se ejecuta DESPUÉS de una navegación exitosa para guardar el destino.
     router.afterEach((to) => {
-        // if(to.meta?.isAlwaysOpen) return;
+        if(to.meta?.isAlwaysOpen) return;
 
         const tabId = to.query.tabId as string;
         const tabToUpdate = openComponents.value.find((tab: any) => tab.id === tabId); 
