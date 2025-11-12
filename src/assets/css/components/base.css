@@ -1,0 +1,21 @@
+/* CONTENEDOR PRINCIPAL */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    gap: 20px;
+}
+
+/* VERSIÓN DE PRODUCTO */
+.version-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.app-version {
+    color: #A4A4A4;
+    align-self: center;
+    font-size: 12px;
+    white-space: nowrap;
+}

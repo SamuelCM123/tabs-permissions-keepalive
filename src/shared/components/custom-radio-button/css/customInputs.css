@@ -1,0 +1,190 @@
+.form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CHECKBOX */
+.wrapper-checkbox {
+    display: flex;
+    padding: 5px;
+    gap: 5px;
+}
+
+.wrapper-checkbox-disabled{
+    cursor: not-allowed;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo personalizado para la etiqueta del checkbox */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Estilo del contenedor del checkbox personalizado */
+.label-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    border: .5px solid #dddddd;
+    margin-right: 8px;
+    transition: background-color 0.3s;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+
+.label-checkbox::after {
+    /* CUANDO SEA SVG SE AGREGA ASI Y SE DESCOMENTA EL WIDTH Y HEIGHT DE ABAJO */
+    /* content: url('../../../assets/check-badge-svgrepo-com.svg'); */
+    content: '\2713';
+    font-size: 16px;
+    color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: color 0.3s;
+}
+
+input[type="checkbox"]:checked+.label-checkbox {
+    background-color: #fff;
+}
+
+
+input[type="checkbox"]:checked+.label-checkbox::after {
+    color: rgb(0, 0, 0);
+    /* NO BORRAR */
+    /* width: 100%; */
+    /* height: 100%; */
+}
+
+/* RADIO */
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.radio-label:hover .label-radio{
+    border: 1px solid #293277;
+    transition: all .3s ease;
+}
+
+.radio-label:hover .label-no-selected{
+    transition: all .3s ease;
+    color: #293277;
+}
+
+.radio-label:focus .label-no-selected{
+    transition: all .3s ease;
+    color: #293277;
+}
+.radio-label:focus .label-radio{
+    transition: all .3s ease;
+    border: 1px solid #293277;
+}
+
+.radio-disabled{
+    pointer-events: none;
+}
+
+.radio-disabled:hover .label-radio{
+    border: 1px solid #DCDCDC;
+    transition: all .3s ease;
+}
+
+.radio-disabled:hover .label-no-selected{
+    transition: all .3s ease;
+    color: #DCDCDC;
+}
+
+.radio-disabled .label-selected{
+    transition: all .3s ease;
+    color: #DCDCDC;
+}
+
+.radio-disabled .label-no-selected{ 
+    transition: all .3s ease;
+    color: #DCDCDC;
+}
+
+.radio-disabled:focus .label-no-selected{ 
+    transition: all .3s ease;
+    color: #DCDCDC;
+}
+
+.radio-disabled .label-radio{ 
+    transition: all .3s ease;
+    border: 1px solid #DCDCDC;
+    /* background-color: #EAEAEA; */
+}
+
+.radio-disabled:focus .label-radio{
+    transition: all .3s ease;
+    border: 1px solid #DCDCDC;
+}
+
+.radio-disabled .radio-selected::after{
+    background-color: #A3A3A3;
+}
+
+/* Estilo del contenedor del checkbox personalizado */
+.label-radio {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    border: 1px solid #ffffff;
+    margin-right: 8px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+.radio-selected{
+    border: 1px solid #293277;
+}
+
+.radio-no-selected{
+    border: 1px solid #a3a3a3;
+}
+
+.label-selected{
+    transition: all .3s ease;
+    color: #293277;
+}
+
+.label-no-selected{
+    transition: all .3s ease;
+    color: #a3a3a3;
+}
+
+.label-radio::after {
+    content: ''; 
+    color: transparent; 
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 30px;
+    top: 50%;
+    left: 50%;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    transition: color 0.3s; 
+}
+
+.radio-selected::after {
+    background-color: #293277;
+}

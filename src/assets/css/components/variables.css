@@ -1,0 +1,34 @@
+:root {
+    /* WEB */
+    --margin_top_container: 5px;
+    --width_containers: 100%;
+    --form_container: 400px;
+    --padding_buttons: 8px;
+    --label_form_left: 10%;
+    --input_padding_left: 11%;
+    --margin_top_inputs_btn: 15px;
+
+    /* WEB: font-size */
+    --label_inputs_size_web: 13.5px;
+    --inputs_selects_size_web: 13px;
+    --description_size_web: 16px;
+        
+    /* MODAL: font-size*/
+    --title_modal_size_web: 18px;
+    --icon_modal_size_web: 45px;
+    --description_modal_size_web: 15px;
+    
+    /* GENERAL */
+    --button_container_size_web: 16px;
+    --disabled_btn: 14px;
+            
+    /* MOBILE */
+    --title_size_mobile: 14px;
+    --description_size_mobile: 13px;
+    --label_inputs_size_mobile: 12px;
+    --button_label_size_mobile: 12px;
+
+    /* TABLET */
+    --description_size_tablet: 14px;
+
+}
