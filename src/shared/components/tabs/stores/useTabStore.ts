@@ -2,22 +2,25 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
+import { useAuthStore } from '@/shared/stores/auth/useAuthStore.ts';
 import { TYPE_CLOSE_TABS } from '../constants/data-type-close.ts';
 import { useTabs } from '@/shared/components/tabs/composables/useTabs.ts';
 import { useDragTabs } from '@/shared/components/tabs/composables/useDragTabs.ts';
-import { useValidateTabs } from '@/shared/components/tabs/composables/useValidateTabs.ts';
+import type { MyRouteRecordRaw } from '@/router/interfaces/Routes.ts';
+// import { useValidateTabs } from '@/shared/components/tabs/composables/useValidateTabs.ts';
 
 export const useTabStore = defineStore('Tabs',() => {
 
     //? Instancia del enrutador
     const router = useRouter();
     const route = useRoute();
+    const AuthStore = useAuthStore();
 
     //? Desestructuraciones de Composables
-    const { 
-        //* Methods
-        validateTabs
-    } = useValidateTabs();
+    // const { 
+    //     //* Methods
+    //     validateTabs
+    // } = useValidateTabs();
 
     //* STATES
 
@@ -246,49 +249,25 @@ export const useTabStore = defineStore('Tabs',() => {
 
     }
 
-    const handleLayoutRepeatFixed = async (name: any) => {
-
-        //? Almacena todas las rutas
-        let totalRoutes = [...openFixedComponents.value];
-        
-        //? Busca la pestaña
-        let moduleFind = await totalRoutes.find((route) => route.name == name);
-        
-        // ? Verifica si la pestaña esta oculta
-        // let isHiddenTab = await hiddenComponents.value.some((route: any) => route.name == name);
-
-        if(moduleFind){
-            console.log('moduleFind:',moduleFind);
-
-            //? Verifica si la pestaña esta oculta para desplazarla a las abiertas
-            // if(isHiddenTab) {
-            //     await handleLayoutHidden(moduleFind);
-            // }
-
-            return {...moduleFind};
-        }
-
-    }
-
     // TODO: Verificar si sera necesario integrar un handler para abrir Supermodules, modules and submodules
 
     /**
      * NOTE: Deprecado
      * Se manejara una forma diferente de mostrar las pestañas ocultas de acuerdo al enrutador
      */
-    const openTab = async (route: any) => {
+    const openTab = async (route: MyRouteRecordRaw) => {
 
         try{
             // console.log('openComponents:',openComponents.value);
             // console.log('hiddenComponents:',hiddenComponents.value);
-            // console.log('route:',route);
+            console.log('route:',route);
 
             /**
              // TODO: Validar lo necesario para desplegar la pestaña
              * 1- Permisos.
              */
 
-            let validateRoute = await validateTabs(route);
+            let validateRoute = await AuthStore.validatePermissions(route);
 
             if(!validateRoute) return;
 
@@ -305,54 +284,6 @@ export const useTabStore = defineStore('Tabs',() => {
                 // lastFullPath: router.resolve(route).fullPath,
                 // params: { id: tabId },
             };
-
-            //? Verificar si la pestaña es fija
-            if(route.meta?.isAlwaysOpen){
-
-                //? Verificar si la pestaña se repite
-                if(!route.meta.isRepeat){
-                    
-                    //? Verificar si la pestaña se repite
-                    tabNumberRepeat = [...openFixedComponents.value].filter((tab: any) => route.name === tab.name);
-
-                    //? Busca la ruta repetida
-                    routeViewRepeat = await tabNumberRepeat.find((tab: any) => tab.name === route.name);
-
-                    // let routeViewRepeat = await componentsRepeat.value.hasOwnProperty(route.name);
-                    // console.log('routeViewRepeat:',routeViewRepeat);
-                    //? Verificar si se encontro la pestaña
-                    if(routeViewRepeat){
-                        layoutSelected.value = await handleLayoutRepeatFixed(route.name);
-            
-                        //? Redirige a la ruta seleccionada
-                        router.replace(
-                            {
-                                name: layoutSelected.value.name,
-                                // query: route.meta.isRepeat ? { tabId: configTab.id } : {},
-                                query: { tabId: configTab.id },
-                            }
-                        );
-                        return
-                    }
-                }
-
-                layoutSelected.value = configTab;
-                await openFixedComponents.value.unshift(configTab);
-
-                //? Redirige a la ruta seleccionada
-                router.replace(
-                    {
-                        name: configTab.name,
-                        // query: route.meta.isRepeat ? { tabId: configTab.id } : {},
-                        query: { tabId: configTab.id },
-                    }
-                );
-                console.log('entro')
-
-                await handleDisplaceTabs();
-
-                return
-            }
 
             //? Verificar si la pestaña se repite
             if(!route.meta.isRepeat){
@@ -395,19 +326,19 @@ export const useTabStore = defineStore('Tabs',() => {
 
             // console.log('configTab:',configTab);
             //? Verificar si hay pestañas fijas
-            // let fixedTabs = openComponents.value.filter((tab: any) => tab.isAlwaysOpen);
-            // console.log('fixedTabs:',fixedTabs)
+            let fixedTabs = openComponents.value.filter((tab: any) => tab.isAlwaysOpen);
+            console.log('fixedTabs:',fixedTabs)
 
             //? Almacena la ruta de la pestaña enfocada
             layoutSelected.value = configTab;
 
-            // if(fixedTabs.length > 0){
-            //     await openComponents.value.splice(fixedTabs.length, 0, configTab);
-            // }
-            // else{
+            if(fixedTabs.length > 0){
+                await openComponents.value.splice(fixedTabs.length, 0, configTab);
+            }
+            else{
                 //? Almacena la ruta de la pestaña abierta
                 await openComponents.value.unshift(configTab);
-            // }
+            }
             // console.log('openComponents:',openComponents.value);
 
             //? Redirige a la ruta seleccionada
@@ -435,6 +366,31 @@ export const useTabStore = defineStore('Tabs',() => {
             // console.log('error:',error);
         }
 
+    }
+
+    const openTabByName = async (name: string, configTab: any) => {
+
+        try {
+            
+            //? Genera un ID unico
+            let tabId = generateTabId();
+
+            //? Redirecciona a la vista
+            router.replace(
+                {
+                    name: name,
+                    query: { tabId: tabId },
+                }
+            );
+
+        }
+        catch (error) {
+            // console.log('error:',error);
+        }
+    }
+
+    const getTabById = (tabId: string) => {
+        return openComponents.value.find((tab: any) => tab.id === tabId);
     }
 
     // TODO: Verificar si sera necesario integrar un handler para abrir Supermodules, modules and submodules
@@ -490,23 +446,23 @@ export const useTabStore = defineStore('Tabs',() => {
     // })
 
     // TODO: Controlar las pestañas y sus estados con localStorage(vueCookies)
-    const saveToStorage = () => {
-        let data = {
-            openComponents: openComponents.value,
-            currentTabId: layoutSelected.value?.id,
-            // NOTE: Definir los estados
-        }
-        localStorage.setItem('tabs-state', JSON.stringify(data));
-    }
+    // const saveToStorage = () => {
+    //     let data = {
+    //         openComponents: openComponents.value,
+    //         currentTabId: layoutSelected.value?.id,
+    //         // NOTE: Definir los estados
+    //     }
+    //     localStorage.setItem('tabs-state', JSON.stringify(data));
+    // }
 
-    const initializeFromStorage = () => {
+    // const initializeFromStorage = () => {
 
-        const storedOpenComponents = localStorage.getItem('tabs-state')
-        if (storedOpenComponents) {
-            openComponents.value = JSON.parse(storedOpenComponents)
-        }
+    //     const storedOpenComponents = localStorage.getItem('tabs-state')
+    //     if (storedOpenComponents) {
+    //         openComponents.value = JSON.parse(storedOpenComponents)
+    //     }
 
-    }
+    // }
 
     // Generar ID único para la pestaña
     const generateTabId = () => {
@@ -618,6 +574,8 @@ export const useTabStore = defineStore('Tabs',() => {
         handleBreadcrumbLayout,
         colorTab,
         openTab,
+        openTabByName,
+        getTabById,
         closeTab,
         closeTabHidden,
 

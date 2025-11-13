@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/shared/stores/auth/useAuthStore.ts';
 // import { useTabStore } from '@/shared/components/tabs/stores/useTabStore.ts';
-import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts';
+// import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts';
 
 /**
  * @function
@@ -14,19 +14,19 @@ export const permissions = ( to: any,from: any,next: any ) => {
     // console.log('from:',from);
     //? Asignaciones de Stores
     const AuthStore = useAuthStore();
-    const ToastStore = useToastStore();
 
     //? Validar que tenga permisos definidos
     if(!to.meta?.permissions) return next();
 
     //? Extraer los permisos definidos de la ruta
-    let { name, value } = to.meta?.permissions;
+    // let { name, value } = to.meta?.permissions;
     // console.log('name:',name);
     // console.log('value:',value);
 
     //? Obtener los permisos configurados del usuario
-    let permissionData = AuthStore.permissionsUser[name as keyof typeof AuthStore.permissionsUser];
-    let hasPermission = permissionData[value];
+    // let permissionData = AuthStore.permissionsUser[name as keyof typeof AuthStore.permissionsUser];
+    // let hasPermission = permissionData[value];
+    let hasPermission = AuthStore.validatePermissions(to);
     // console.log('permissionData:',permissionData);
     // console.log('permissionData[value]:',permissionData[value]);
 
@@ -38,14 +38,7 @@ export const permissions = ( to: any,from: any,next: any ) => {
         
     }
 
-    // NOTE: No tiene permiso
-
-    ToastStore.openToast({
-        title: 'Acceso denegado',
-        message: 'No tienes permiso para acceder a este módulo',
-        type: 'error',
-    })
-
+    //? Si no tiene permiso, redirige a la página anterior manteniendo el tabId
     if (from.query.tabId) {
 
         //? Busca si ya existe una pestaña abierta con el tabId de la RUTA DE DESTINO ('to')

@@ -16,12 +16,14 @@ export const redirectTabs = ( router: any ) => {
     
         const TabStore = useTabStore();
 
-        // TODO: Despliega una pestaña de inicio
+        // let tabsFound = TabStore.getTabById(to.query.tabId);
+
+        // TODO: Despliega una pestaña de inicio VERIFICAR SI SE AGREGA
         if(firstLoad) {
 
             let isDashboard = await to.matched.some((route:any) => route.name === 'dashboard');
             if(isDashboard && to.name !== 'dashboard') {
-                console.log('to:',to)
+                // console.log('to:',to)
                 TabStore.openTab(to);
                 firstLoad = false;
             }

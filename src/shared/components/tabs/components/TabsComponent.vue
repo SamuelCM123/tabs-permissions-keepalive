@@ -72,29 +72,29 @@
       <div class="container-tabs">
 
         <!--* CONTENEDOR DE PESTAÑAS FIJAS -->
-        <div 
+        <!-- <div 
           v-for="(component, index) in openFixedComponents" 
           :key="index" 
           :class="[
             colorTab(component)[0],
             component.isAlwaysOpen ? 'no-close' : ''
           ]"
-          >
+          > -->
 
           <!--* NOMBRE DE PESTAÑA -->
-          <div class="wrapper-tab-name" @click="handleLayout(component)" :title="component.title">
+          <!-- <div class="wrapper-tab-name" @click="handleLayout(component)" :title="component.title">
 
             <span class="tab-name" v-html="component.title"></span>
 
           </div>
 
-        </div>
+        </div> -->
 
         <!--* CONTENEDOR DE PESTAÑAS -->
         <div 
           v-for="(component, index) in openComponents" 
           :key="component.id" 
-          :draggable="true"
+          :draggable="component.isAlwaysOpen ? false : true"
           @dragstart="dragStart($event, index)" 
           @dragend="dragEnd($event, index)"
           @dragover.prevent="dragOver($event, component, index)" 

@@ -56,8 +56,8 @@ export const saveLastPath = ( router: any ) => {
 
     router.beforeEach((to: any, from: any, next: any) => {
     
-        console.log('to:', to);
-        console.log('from:', from);
+        // console.log('to:', to);
+        // console.log('from:', from);
         
         //? 2.1. Bloqueo y Reseteo: Si es un popstate, evita la lógica de PUSH/reutilización.
         if (TabStore.isPopState) {
@@ -78,7 +78,7 @@ export const saveLastPath = ( router: any ) => {
         // console.log('openTab:',openTab);
         //? Verifica que sea una pestaña nueva / existente (navegación normal)
         if (openTab) {
-            console.log('true');
+            // console.log('true');
             //? La pestaña de destino existe, permite la navegación.
             next();
 
@@ -92,7 +92,7 @@ export const saveLastPath = ( router: any ) => {
         }
         //? Cambia la vista en la misma pestaña (reutilización)
         else {
-            console.log('false');
+            // console.log('false');
             
             /**
              *? 1 - Asignar el query param de la pestaña ACTUAL ('from.query.tabId') 

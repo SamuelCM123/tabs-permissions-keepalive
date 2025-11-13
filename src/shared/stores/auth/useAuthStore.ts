@@ -6,7 +6,13 @@ import { usePermissions } from '@/shared/components/sidebar/composables/usePermi
 export const useAuthStore = defineStore('Auth',() => {
 
     //? Desestructuraciones de Composables
-    const { permissionsUser } = usePermissions();
+    const { 
+        //* STATES
+        permissionsUser,
+
+        //* METHODS
+        validatePermissions,
+    } = usePermissions();
 
     //* STATES
 
@@ -19,6 +25,6 @@ export const useAuthStore = defineStore('Auth',() => {
         permissionsUser,
 
         //* ACTIONS
-        
+        validatePermissions,
     }
 })

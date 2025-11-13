@@ -114,7 +114,7 @@ export const useSidebarMenu = (props: any) => {
     }
 
     const handleModuleAction = (item: any) => {
-        console.log('item:',item);
+        // console.log('item:',item);
         if(item?.children?.length > 0){
             item.meta.dropdownOpen = !item?.meta?.dropdownOpen
         }

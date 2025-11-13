@@ -1,7 +1,7 @@
 <script setup>
 
     // Importaciones Generales
-    import { defineAsyncComponent, onMounted, ref } from 'vue';
+    import { defineAsyncComponent, onMounted } from 'vue';
 
     // Importaciones de Composables
     import { useSidebarStore } from '@/shared/components/sidebar/stores/useSidebarStore.ts';

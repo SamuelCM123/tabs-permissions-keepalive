@@ -85,6 +85,10 @@ export const useDragTabs = (components: Ref<Array<any>>) => {
          * @type {Object} -Toma el elemento hijo del contenedor de la pestaña
          */
         let elementTab = e.target.closest('.wrapper-tab-name');
+        let currentElement = components.value.find((component, idx) => idx === index);
+
+        // console.log('currentElement:',currentElement)
+        if(currentElement?.isAlwaysOpen) return;
 
         // No aplicar el estilo a la misma pestaña que se arrastra
         if(draggedIndex.value !== index){
@@ -122,6 +126,15 @@ export const useDragTabs = (components: Ref<Array<any>>) => {
      */
     const drop = (index: any) => {
         
+        // console.log('components.value:',components.value)
+        // console.log('index:',index)
+        //? Obtener el elemento actual del indice arrastrado
+        let currentElement = components.value.find((component, idx) => idx === index);
+
+        // console.log('currentElement: ',currentElement)
+        
+        if(currentElement?.isAlwaysOpen) return;
+
         /**
          * @type {Object} -Almacena el componente de la pestaña dependiendo del elemento arrastrado
          */
