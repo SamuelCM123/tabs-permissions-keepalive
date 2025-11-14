@@ -1,7 +1,7 @@
 <script setup>
 
   // Importaciones Generales
-  import { defineAsyncComponent, onMounted } from 'vue';
+  import { defineAsyncComponent, onDeactivated, onMounted, onUnmounted } from 'vue';
 
   // Importaciones de Pinia
   import { storeToRefs } from 'pinia';
@@ -23,6 +23,7 @@
     closeTab,
     closeTabHidden,
     route,
+    router,
 
     dragStart,
     dragEnd,
@@ -53,6 +54,13 @@
       handleDisplaceTabs();
     });
 
+  })
+
+  onDeactivated( async () => {
+    console.log('deactivated')
+    router.push({ name: 'dashboard' });
+    openComponents.value = [];
+    hiddenComponents.value = [];
   })
 
   // onActivated( async () => {
@@ -163,6 +171,7 @@
 
               <span 
                 class="tab-name-hidden" 
+                :class="{'tab-hidden-noclose': tabHidden.isAlwaysOpen}"
                 :title="tabHidden.title"
                 v-html="tabHidden.title"
                 @click="handleLayoutHidden(tabHidden)"
@@ -172,7 +181,10 @@
               <!-- </div> -->
 
               <!--* ICONO PARA CERRAR PESTAÑA -->
-              <button class="tab-close-hidden" @click.prevent="closeTabHidden(tabHidden)">
+              <button
+                v-if="!tabHidden.isAlwaysOpen"
+                class="tab-close-hidden" 
+                @click.prevent="closeTabHidden(tabHidden)">
 
                 <span class="material-symbols-rounded icon-tab">
                   close
@@ -379,6 +391,11 @@
         max-width: 190px;
         /* background-color: red; */
         /* pointer-events: none; */
+    }
+
+    .tab-hidden-noclose{
+      max-width: initial;
+      min-width: 100%;
     }
 
     .tabs {

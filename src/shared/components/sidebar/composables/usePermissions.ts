@@ -87,7 +87,7 @@ export const usePermissions = () => {
 
     //* METHODS
     const validatePermissions = (routeTabs: any) => {
-        console.log('routeTabs:',routeTabs)
+        // console.log('routeTabs:',routeTabs)
         // console.log('routeTabs.meta.permissions:',routeTabs.meta.permissions);
         // console.log('AuthStore.permissionsUser:',AuthStore.permissionsUser);
 

@@ -14,28 +14,30 @@ export const redirectTabs = ( router: any ) => {
         
         // console.log('firstLoad:',firstLoad);
     
-        const TabStore = useTabStore();
+        // const TabStore = useTabStore();
 
         // let tabsFound = TabStore.getTabById(to.query.tabId);
 
         // TODO: Despliega una pestaña de inicio VERIFICAR SI SE AGREGA
         if(firstLoad) {
 
-            let isDashboard = await to.matched.some((route:any) => route.name === 'dashboard');
-            if(isDashboard && to.name !== 'dashboard') {
-                // console.log('to:',to)
-                TabStore.openTab(to);
-                firstLoad = false;
-            }
+        //     let isDashboard = await to.matched.some((route:any) => route.name === 'dashboard');
+        //     if(isDashboard && to.name !== 'dashboard') {
+        //         // console.log('to:',to)
+        //         TabStore.openTab(to);
+        //         firstLoad = false;
+        //     }
+            firstLoad = false;
+            return next({ name: 'dashboard' });
             
         }
 
-        if(!to.meta?.isAlwaysOpen) {
-            if(TabStore.openComponents.length === 0 && to.name !== 'dashboard') {
-            // if(to.name !== 'dashboard') {
-                return next({ name: 'dashboard' });
-            }
-        }
+        // if(!to.meta?.isAlwaysOpen) {
+            // if(TabStore.openComponents.length === 0 && to.name !== 'dashboard') {
+            // // if(to.name !== 'dashboard') {
+                // return next({ name: 'dashboard' });
+            // }
+        // }
         
         next();
     });

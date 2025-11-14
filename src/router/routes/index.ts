@@ -74,7 +74,7 @@ export const routesSidebar: MyRouteRecordRaw[] =[
           },
           {
             name: "split-button-2",
-            path: "split-button-2",
+            path: "split-button-2/:id?",
             component: () => import("@/modules/buttons/split-buttons/components/SplitButton2.vue"),
             meta: {
               title: "Split Button 2",
@@ -117,6 +117,10 @@ export const routesSidebar: MyRouteRecordRaw[] =[
             isShow: false,
             isSelected: false,
           },
+          permissions: {
+            name: "button_loading",
+            value: "read",
+          }
         },
       },
       {
@@ -289,7 +293,7 @@ export const routesSidebar: MyRouteRecordRaw[] =[
               dropdownOpen: false,
               isShow: true,
               isRepeat: true,
-              isAlwaysOpen: true,
+              // isAlwaysOpen: true,
               keepAlive: true,
               limitTabs: 2,
               isBreadcrumb: {
@@ -347,6 +351,7 @@ export const routesSidebar: MyRouteRecordRaw[] =[
           dropdownOpen: false,
           isShow: true,
           isRepeat: true,
+          isAlwaysOpen: true,
           keepAlive: true
         }
       },
@@ -365,7 +370,7 @@ export const routesView = <any>[
         path: '/dashboard',
         name: 'dashboard',
         component: () => import("@/modules/dashboard/layout/DashboardLayout.vue"),
-        redirect: { name: `websocket-index-inter` }, // TODO: Verificar el redireccionamiento
+        redirect: { name: `websocket-public` }, // TODO: Verificar el redireccionamiento
         children: [...routesSidebar],
       }
     ],

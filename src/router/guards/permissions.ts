@@ -1,6 +1,4 @@
 import { useAuthStore } from '@/shared/stores/auth/useAuthStore.ts';
-// import { useTabStore } from '@/shared/components/tabs/stores/useTabStore.ts';
-// import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts';
 
 /**
  * @function
@@ -18,17 +16,8 @@ export const permissions = ( to: any,from: any,next: any ) => {
     //? Validar que tenga permisos definidos
     if(!to.meta?.permissions) return next();
 
-    //? Extraer los permisos definidos de la ruta
-    // let { name, value } = to.meta?.permissions;
-    // console.log('name:',name);
-    // console.log('value:',value);
-
     //? Obtener los permisos configurados del usuario
-    // let permissionData = AuthStore.permissionsUser[name as keyof typeof AuthStore.permissionsUser];
-    // let hasPermission = permissionData[value];
     let hasPermission = AuthStore.validatePermissions(to);
-    // console.log('permissionData:',permissionData);
-    // console.log('permissionData[value]:',permissionData[value]);
 
     //? Validar si el usuario tiene permiso para ingresar a la ruta
     if(hasPermission){

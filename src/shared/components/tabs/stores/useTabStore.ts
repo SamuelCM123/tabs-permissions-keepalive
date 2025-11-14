@@ -161,8 +161,23 @@ export const useTabStore = defineStore('Tabs',() => {
         //? Elimina la pestaña oculta
         hiddenComponents.value = await hiddenComponents.value.filter((tab: any) => tab.id != routeView.id);
 
+        //? Verificar si hay pestañas fijas
+        let fixedTabs = openComponents.value.filter((tab: any) => tab.isAlwaysOpen);
+        console.log('fixedTabs:',fixedTabs)
+
+        //? Almacena la ruta de la pestaña enfocada
+        layoutSelected.value = tabSelected;
+
+        if(fixedTabs.length > 0){
+            await openComponents.value.splice(fixedTabs.length, 0, tabSelected);
+        }
+        else{
+            //? Almacena la ruta de la pestaña abierta
+            await openComponents.value.unshift(tabSelected);
+        }
+
         //? Agrega la pestaña oculta a las abiertas
-        await openComponents.value.unshift(tabSelected);
+        // await openComponents.value.unshift(tabSelected);
 
         //? Actualiza la pestaña seleccionada
         layoutSelected.value = routeView;
@@ -255,7 +270,7 @@ export const useTabStore = defineStore('Tabs',() => {
      * NOTE: Deprecado
      * Se manejara una forma diferente de mostrar las pestañas ocultas de acuerdo al enrutador
      */
-    const openTab = async (route: MyRouteRecordRaw) => {
+    const openTab = async (route: any) => {
 
         try{
             // console.log('openComponents:',openComponents.value);
@@ -280,6 +295,7 @@ export const useTabStore = defineStore('Tabs',() => {
                 name: route.name,
                 path: route.path,
                 tabHistory: [],
+                params: {...route.params},
                 isAlwaysOpen: route.meta?.isAlwaysOpen || false,
                 // lastFullPath: router.resolve(route).fullPath,
                 // params: { id: tabId },
@@ -327,7 +343,7 @@ export const useTabStore = defineStore('Tabs',() => {
             // console.log('configTab:',configTab);
             //? Verificar si hay pestañas fijas
             let fixedTabs = openComponents.value.filter((tab: any) => tab.isAlwaysOpen);
-            console.log('fixedTabs:',fixedTabs)
+            // console.log('fixedTabs:',fixedTabs)
 
             //? Almacena la ruta de la pestaña enfocada
             layoutSelected.value = configTab;
@@ -347,6 +363,7 @@ export const useTabStore = defineStore('Tabs',() => {
                     name: configTab.name,
                     // query: route.meta.isRepeat ? { tabId: configTab.id } : {},
                     query: { tabId: configTab.id },
+                    params: {...configTab.params},
                 }
             );
             /**
@@ -368,10 +385,12 @@ export const useTabStore = defineStore('Tabs',() => {
 
     }
 
-    const openTabByName = async (name: string, configTab: any) => {
+    const openTabByName = async (name: string, configTab?: any) => {
 
         try {
-            
+            console.log('name:',name)
+            console.log('configTab:',configTab)
+
             //? Genera un ID unico
             let tabId = generateTabId();
 
@@ -379,7 +398,11 @@ export const useTabStore = defineStore('Tabs',() => {
             router.replace(
                 {
                     name: name,
-                    query: { tabId: tabId },
+                    query: { 
+                        tabId: tabId,
+                        ...configTab?.query
+                    },
+                    params: {...configTab?.params}
                 }
             );
 
@@ -397,7 +420,7 @@ export const useTabStore = defineStore('Tabs',() => {
 
     // CRÍTICO: Se ejecuta DESPUÉS de una navegación exitosa para guardar el destino.
     router.afterEach((to) => {
-        if(to.meta?.isAlwaysOpen) return;
+        // if(to.meta?.isAlwaysOpen) return;
 
         const tabId = to.query.tabId as string;
         const tabToUpdate = openComponents.value.find((tab: any) => tab.id === tabId); 
