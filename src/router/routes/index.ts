@@ -73,8 +73,8 @@ export const routesSidebar: MyRouteRecordRaw[] =[
             },
           },
           {
-            name: "split-button-2",
             path: "split-button-2/:id?",
+            name: "split-button-2",
             component: () => import("@/modules/buttons/split-buttons/components/SplitButton2.vue"),
             meta: {
               title: "Split Button 2",
@@ -130,10 +130,11 @@ export const routesSidebar: MyRouteRecordRaw[] =[
           import(
             "@/modules/buttons/buttons-action/layouts/ButtonsActionLayout.vue"
           ),
+        redirect: { name: "action-button-1" },
         meta: {
           title: "Button Action",
           icon: "refresh",
-          keyword: ["loading", "carga", "boton"],
+          keyword: ["loading", "carga", "boton","action"],
           dropdownOpen: false,
           isShow: true,
           keepAlive: true,
@@ -144,7 +145,7 @@ export const routesSidebar: MyRouteRecordRaw[] =[
         },
         children: [
           {
-            path: "/action-button-1",
+            path: "/action-button-1/:id?",
             name: "action-button-1",
             component: () =>
               import(
@@ -155,14 +156,108 @@ export const routesSidebar: MyRouteRecordRaw[] =[
               icon: "refresh",
               keyword: ["refresh"],
               isShow: true,
-              isRepeat: true,
+              isRepeat: false,
               keepAlive: true,
               limitTabs: 2,
+              permissions: {
+                name: "button_action_1",
+                value: "read",
+              }
             }
           },
         ],
       },
     ],
+  },
+  {
+    path: "/perfiles",
+    name: "profiles",
+    component: () => import("@/modules/profiles/layout/ProfilesLayout.vue"),
+    redirect: { name: "get-profiles" },
+    props: true,
+    meta: {
+      title: "Perfiles",
+      icon: "group",
+      keyword: ["perfiles", "perfil"],
+      dropdownOpen: false,
+      isShow: true,
+      keepAlive: true,
+      isRepeat: true,
+      isBreadcrumb: {
+        isShow: false,
+        isSelected: false,
+      },
+      permissions: {
+        name: "perfiles",
+        value: "read",
+      }
+    },
+    children: [
+      {
+        path: 'perfiles',
+        name: 'get-profiles',
+        component: () => import("@/modules/profiles/components/GetProfiles.vue"),
+        meta: {
+          title: "Perfiles",
+          icon: "group",
+          keyword: ["perfiles", "perfil"],
+          dropdownOpen: false,
+          isShow: false,
+          keepAlive: true,
+          isBreadcrumb: {
+            isShow: true,
+            isSelected: true,
+          },
+          permissions: {
+            name: "perfiles",
+            value: "read",
+          }
+        }
+      },
+      {
+        path: 'add',
+        name: 'profile-add',
+        component: () => import("@/modules/profiles/components/AddProfile.vue"),
+        meta: {
+          title: "Agregar Perfil",
+          icon: "add",
+          keyword: ["agregar"],
+          dropdownOpen: false,
+          isShow: false,
+          keepAlive: true,
+          isBreadcrumb: {
+            isShow: true,
+            isSelected: false,
+          },
+          permissions: {
+            name: "perfiles",
+            value: "add",
+          }
+        }
+      },
+      {
+        path: "editar/:id_profile?",
+        name: "profile-edit",
+        component: () => import("@/modules/profiles/components/EditProfile.vue"),
+        props: true,
+        meta: {
+          title: "Editar Perfil",
+          icon: "edit",
+          keyword: ["editar"],
+          dropdownOpen: false,
+          isShow: false,
+          keepAlive: true,
+          isBreadcrumb: {
+            isShow: true,
+            isSelected: false,
+          },
+          permissions: {
+            name: "perfiles",
+            value: "edit",
+          }
+        }
+      }
+    ]
   },
   {
     path: "/selects",
@@ -202,6 +297,10 @@ export const routesSidebar: MyRouteRecordRaw[] =[
             isShow: false,
             isSelected: false,
           },
+          permissions: {
+            name: "select_buscador",
+            value: "read",
+          }
         },
       },
     ],
@@ -220,6 +319,10 @@ export const routesSidebar: MyRouteRecordRaw[] =[
       dropdownOpen: false,
       isShow: true,
       keepAlive: true,
+      permissions: {
+        name: "acordeones",
+        value: "read",
+      },
       isBreadcrumb: {
         isShow: false,
         isSelected: false,
@@ -280,6 +383,10 @@ export const routesSidebar: MyRouteRecordRaw[] =[
                 isShow: true,
                 isSelected: true,
               },
+              permissions: {
+                name: "websocket_index_component",
+                value: "read",
+              }
             }
           },
           {
@@ -300,12 +407,17 @@ export const routesSidebar: MyRouteRecordRaw[] =[
                 isShow: true,
                 isSelected: true,
               },
+              permissions: {
+                name: "websocket_index_inter",
+                value: "read",
+              }
             }
           },
           {
             path: 'desk/:id_desk?',
             name: 'websocket-desk',
             component: () => import("@/modules/web-sockets/components/Desk.vue"),
+            props: true,
             meta: {
               title: 'Websocket Desk',
               icon: 'refresh',
@@ -350,9 +462,13 @@ export const routesSidebar: MyRouteRecordRaw[] =[
           keyword: ['websocket'],
           dropdownOpen: false,
           isShow: true,
-          isRepeat: true,
+          isRepeat: false,
           isAlwaysOpen: true,
-          keepAlive: true
+          keepAlive: true,
+          permissions: {
+            name: "websocket_public",
+            value: "read",
+          }
         }
       },
     ]
@@ -370,7 +486,7 @@ export const routesView = <any>[
         path: '/dashboard',
         name: 'dashboard',
         component: () => import("@/modules/dashboard/layout/DashboardLayout.vue"),
-        redirect: { name: `websocket-public` }, // TODO: Verificar el redireccionamiento
+        // redirect: { name: `websocket-public` }, // TODO: Verificar el redireccionamiento
         children: [...routesSidebar],
       }
     ],

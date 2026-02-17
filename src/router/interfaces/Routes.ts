@@ -41,6 +41,7 @@ export interface MyRouteMeta extends RouteMeta {
     isAllPermissions?: boolean; // TODO: Verificar si es necesario
     isBreadcrumb?: MyBreadcrumbMeta; // Configuración del Breadcrumb
     permissions?: PermissionsRoute;
+    props?: boolean;
 }
 
 // -------------------------------------------

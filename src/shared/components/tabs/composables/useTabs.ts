@@ -73,7 +73,7 @@ export const useTabs = (openComponents: any, hiddenComponents: any) => {
 
         try{
 
-            console.log('sizeLeft:',sizeLeft.value);
+            // console.log('sizeLeft:',sizeLeft.value);
             // Valida cuando se muestran las pestañas y cuando no
             if(sizeLeft.value < 0){
                 console.log('openComponents:',openComponents.value);

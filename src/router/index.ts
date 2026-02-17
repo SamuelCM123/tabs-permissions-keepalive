@@ -18,7 +18,8 @@ const router = createRouter({
  */
 export const setupRouterGuards = () => {
 
-  router.beforeEach(guards.permissions);
+  // router.beforeEach(guards.permissions);
+  guards.permissions(router);
   guards.redirectTabs(router);
   guards.saveLastPath(router);
 

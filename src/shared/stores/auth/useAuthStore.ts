@@ -12,6 +12,7 @@ export const useAuthStore = defineStore('Auth',() => {
 
         //* METHODS
         validatePermissions,
+        hasPermission,
     } = usePermissions();
 
     //* STATES
@@ -26,5 +27,6 @@ export const useAuthStore = defineStore('Auth',() => {
 
         //* ACTIONS
         validatePermissions,
+        hasPermission,
     }
 })

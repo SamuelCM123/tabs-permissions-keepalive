@@ -28,7 +28,8 @@ export const redirectTabs = ( router: any ) => {
         //         firstLoad = false;
         //     }
             firstLoad = false;
-            return next({ name: 'dashboard' });
+            // TODO: Controlar el redireccionamiento de pestañas
+            // return next({ name: 'dashboard' });
             
         }
 

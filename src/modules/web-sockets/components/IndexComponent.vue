@@ -39,7 +39,10 @@
         <div class="row">
             <div class="wrapper-buttons">
 
-                <router-link class="btn-form" :to="{ name:'websocket-public' }">Pantalla pública</router-link>
+                <button class="btn-form" @click="TabStore.openTabByNameUniversal('action-button-1', { params: { id: 1000110101001 }})">Button Action</button>
+                <router-link class="btn-form" :to="{ name: 'action-button-1' }">Button Action</router-link>
+                <button class="btn-form" @click="TabStore.openTabByNameUniversal('websocket-public')">Pantalla Pública (OpenTab)</button>
+                <router-link class="btn-form" :to="{ name:'websocket-public' }">Pantalla pública (Router Link)</router-link>
                 <router-link class="btn-form secundary" :to="{ name: 'websocket-new-ticket' }">Crear Tickets</router-link>
                 <router-link class="btn-form secundary" :to="{ name: 'websocket-index-inter' }" replace>Index Inter</router-link>
 
@@ -66,12 +69,13 @@
 
                 </div>
 
-                <keep-alive>
-                    <input v-model="fieldDesk" name="escritorio" type="text" class="input-form" placeholder="No. Escritorio" autofocus>
-                </keep-alive>
+                <input v-model="fieldDesk" name="escritorio" type="text" class="input-form" placeholder="No. Escritorio" autofocus>
 
                 <router-link 
-                    :to="{ name: 'websocket-desk', params: { id_desk: fieldDesk } }" 
+                    :to="{ 
+                        name: 'websocket-desk', 
+                        params: { id_desk: fieldDesk },
+                    }" 
                     type="submit" 
                     class="btn-form"
                     replace
@@ -103,7 +107,7 @@
     .wrapper-buttons{
         display: flex;
         flex-direction: column;
-        width: 300px;
+        /* width: 300px; */
         gap: 10px;
     }
 
@@ -129,17 +133,21 @@
     .row{
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: nowrap;
+        /* justify-content: center; */
+        /* align-items: center; */
         width: 100%;
-        gap: 40px;
+        gap: 30px;
         /* height: 100%; */
     }
 
     .btn-form{
         white-space: nowrap;
         margin: initial;
-        width: 300px;
+        width: auto;
+        padding: 0px 40px;
+        max-width: initial;
+        min-width: initial;
     }
 
     .secundary{

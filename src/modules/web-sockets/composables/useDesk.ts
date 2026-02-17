@@ -2,9 +2,13 @@
 import { onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { API_CONFIG } from '@/services/api/api.config.ts';
+import { useTabStore } from '@/shared/components/tabs/stores/useTabStore.ts';
 import socket from '@/modules/web-sockets/composables/useServices.ts';
 
 export const useDesk = () => {
+
+    //? Asignaciones de Stores
+    const TabStore = useTabStore();
 
     //? Instancia de socket
     const wsService = socket;
@@ -22,6 +26,7 @@ export const useDesk = () => {
     //* METHODS
 
     const loadInitialCount = async () => {
+        console.log('Route:',Route);
         if(!Route.params.id_desk) return Router.push({ name: 'index' });
         id_desk.value = Route.params.id_desk;
         // console.log('id_desk:',id_desk.value);
@@ -101,6 +106,7 @@ export const useDesk = () => {
         handleIncomingMessages,
         getTicket,
         finishTicket,
+        TabStore,
     }
 
 }

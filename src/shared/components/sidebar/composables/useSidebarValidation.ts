@@ -9,14 +9,23 @@ export const useSidebarValidation = () => {
 
     const verifyModuleVisibility = (route: any) => {
 
-        if(route?.meta?.isShow === false) return false
+        //? Verificar los permisos de los módulos
+        // console.log('route:',route);
+        
+        if(route?.meta?.isShow) return true
 
         // Verifica si tiene módulos a mostrar
-        if(route?.children?.length > 0){
-            return route?.children?.some((child: any) => child.meta.isShow === true);
+        if(!route?.meta?.isShow){
+            if(route?.children?.length > 0){
+                return route?.children?.some((child: any) => child.meta.isShow === true);
+            }
         }
 
-        return true
+        return false
+    }
+
+    const verifyActionVisibility = (route: any) => {
+        return route?.children?.some((child: any) => child.meta.isShow === true);
     }
 
     return {
@@ -24,6 +33,7 @@ export const useSidebarValidation = () => {
         
         //* Methods
         verifyModuleVisibility,
+        verifyActionVisibility,
     }
 
 }

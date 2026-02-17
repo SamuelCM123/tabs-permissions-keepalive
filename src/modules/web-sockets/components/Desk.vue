@@ -1,10 +1,15 @@
 <script setup>
 
     // Importaciones Generales
-    import { onMounted, onUnmounted } from 'vue';
+    import { onMounted, onUnmounted, watchEffect } from 'vue';
 
     // Importaciones de Composables
     import { useDesk } from '@/modules/web-sockets/composables/useDesk.ts';
+
+    // Definiciones de Props
+    const props = defineProps({
+        id_desk: {type: null},
+    })
 
     // Desestructuraciones de Composables
     const {
@@ -20,10 +25,12 @@
         wsService,
         getTicket,
         finishTicket,
+        TabStore,
     } = useDesk();
 
     // Ciclo de vida
     onMounted(() => {
+        console.log('monto desk');
         loadInitialCount();
         // wsService.connect();
         // wsService.subscribe('on-ticket-count-changed', handleIncomingMessages);
@@ -34,17 +41,21 @@
     //     wsService.unsubscribe('on-ticket-count-changed');
     // })
 
+    watchEffect(() => {
+        console.log('props.id_desk:',props.id_desk);
+    })
+
 </script>
 
 <template>
     <div class="container">
-        <h1 class="title-section">Escritorio {{ id_desk }}</h1>
+        <h1 class="title-section">Escritorio {{ props.id_desk }}</h1>
         <hr>
         <div class="row">
             <div class="wrapper-left">
                 <h4 class="title-header">Atendiendo a 
                     <small v-if="workingTicket" class="text-primary">{{ workingTicket }}</small>
-                    <small v-else="workingTicket" class="text-primary">...</small>
+                    <small v-else class="text-primary">...</small>
                 </h4>
 
                 <div class="button-container">
@@ -68,6 +79,7 @@
             </div>
         </div>
         <router-link :to="{ name: 'websocket-index-layout' }" class="btn-form" style="width: 300px;">Regresar</router-link>
+        <div @click="TabStore.openTabByNameUniversal('profile-edit', { params: { id_profile: 202 }  })" class="btn-form" style="width: 300px;">Editar Perfiles</div>
     </div>
 </template>
 

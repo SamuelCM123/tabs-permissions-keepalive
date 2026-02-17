@@ -260,12 +260,9 @@
       </div>
       <div class="container-views">
 
-        <router-view v-slot="{ Component }">
-          <keep-alive>
-            <component :is="Component" :key="$route.fullPath" />
-          </keep-alive>
-        </router-view>
-
+        <!-- TODO: Quitar el route.params -->
+        <slot name="router-view"></slot>        
+  
       </div>
 
       <Transition name="fade" mode="out-in">

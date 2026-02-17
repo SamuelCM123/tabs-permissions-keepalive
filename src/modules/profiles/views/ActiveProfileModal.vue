@@ -1,0 +1,139 @@
+<script setup>
+    
+    // Importaciones Nativas
+    import { defineAsyncComponent } from 'vue';
+
+    // Importaciones Composables
+    import { useStatusProfileModal } from '@/modules/dashboard/configurations/profiles/composables/useStatusProfileModal.js';
+
+    // Definiciones de Props
+    const props = defineProps({
+        modalState: {type:Boolean, default: true},
+        nameProfile: {type:String, default: true},
+        submitEditProfile: {type:null},
+        activitySession: {type:Function},
+    })
+
+    // Definición de Emits
+    const emits = defineEmits(["modalS"]);
+
+    // Desestructuraciones de Composables
+    const {
+        // Properties
+        widthMobile,
+        widthWeb,
+        modalConfig,
+            
+        // Methods
+        closeModal,
+        formSubmitModal,
+    } = useStatusProfileModal(props,emits);
+
+    // Componentes
+    const BaseModal = defineAsyncComponent(() => import('@/shared/components/modal/BaseModal.vue'));
+    const ButtonLoading = defineAsyncComponent(() => import('@/shared/components/buttons/components/ButtonLoading.vue'));
+
+</script>
+
+<template>
+    <BaseModal
+        v-if="props.modalState"
+        :modal-config="modalConfig"
+        :widthMobile="widthMobile" 
+        :width="widthWeb"
+    >
+        <!--* Slot para cerrar -->
+        <template #close>
+            <button 
+                class="btn-close material-symbols-rounded" 
+                @click="closeModal"
+                >
+                Close
+            </button>
+        </template>
+
+        <!--* Slot para encabezado -->
+        <template #header>
+
+            <h1 class="title-modal" :title="props.nameProfile">ACTIVAR PERFIL {{ props.nameProfile }}</h1>
+
+        </template>
+
+        <!--* Slot para cuerpo del contenido -->
+        <template #body>
+
+            <div class="container-description-modal">
+
+                <!--* DESCRIPCIÓN -->
+                <span class="description-modal">
+                    <span>¿Desea activar este perfil?</span>
+                </span>
+
+            </div>
+
+        </template>
+
+        <!--* Slot para pie de modal -->
+        <template #footer>
+
+            <div class="button-container">
+
+                <!--* Botón cancelar -->
+                <button 
+                    class="btn-form btn-secundary"
+                    @click="closeModal"
+                    >
+                    <span>NO</span>
+                </button>
+
+                <!--* Botón guardar -->
+                <ButtonLoading
+                    :name-button="'SI'"
+                    :time-btn="3000"
+                    width="100%"
+                    max-width="140px"
+                    :action-button="formSubmitModal"
+                >
+                </ButtonLoading>
+
+            </div>
+
+        </template>
+
+    </BaseModal>
+</template>
+
+<style scoped>
+    
+    .description-modal{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 0px;
+        margin-top: 0;
+        gap: 10px;
+        margin-top: 10px;
+        color: #000;
+    }
+
+    .title-modal{
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 90%;
+    }
+
+    .button-container{
+        /* margin: 0 auto; */
+        width: 300px;
+        margin-top: 10px;
+        gap: 20px;
+    }
+
+    .btn-form{
+        width: 100%;
+        max-width: 200px;
+    }
+
+</style>

@@ -9,12 +9,14 @@ export const useSidebarMenu = (props: any) => {
     const {
         //* Methods
         verifyModuleVisibility,
+        verifyActionVisibility,
     } = useSidebarValidation();
 
     //? Desestructuraciones de Stores
     const {
         // Actions
         openTab,
+        openTabByNameUniversal,
     } = useTabStore();
 
     //* PROPERTIES
@@ -114,12 +116,16 @@ export const useSidebarMenu = (props: any) => {
     }
 
     const handleModuleAction = (item: any) => {
-        // console.log('item:',item);
-        if(item?.children?.length > 0){
+        console.log('item:',item);
+
+        //? Verifica si tiene módulos a mostrar
+        const response = verifyActionVisibility(item);
+
+        if(response){
             item.meta.dropdownOpen = !item?.meta?.dropdownOpen
         }
         else{
-            openTab(item);
+            openTabByNameUniversal(item.name);
         }
     }
 
@@ -134,6 +140,7 @@ export const useSidebarMenu = (props: any) => {
         isExpandSubmenu,
         handleModuleAction,
         verifyModuleVisibility,
+        verifyActionVisibility,
     }
 
 }

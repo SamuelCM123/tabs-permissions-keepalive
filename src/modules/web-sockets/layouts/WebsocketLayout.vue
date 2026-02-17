@@ -1,13 +1,23 @@
 <script setup>
+
+    // Importaciones Generales
+    import { onMounted } from 'vue';
     
+
+    onMounted(() => {
+        console.log('websockets montado');
+    })
 </script>
 
 <template>
     <div class="container">
         <!-- Websocket Layout -->
+         <!-- TODO: Hacer uso de keep-alive -->
         <router-view v-slot="{ Component }">
             <keep-alive>
-                <component :is="Component"/>
+                <component 
+                :is="Component" 
+                />
             </keep-alive>
         </router-view>
     </div>

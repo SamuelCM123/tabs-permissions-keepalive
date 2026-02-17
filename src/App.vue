@@ -45,9 +45,7 @@
     <div class="container-main">
       <!-- TODO: Verificar el uso correcto de la renderizacion y transiciones -->
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
           <component :is="Component" />
-        </transition>
       </router-view>
     </div>
   </transition>

@@ -36,6 +36,7 @@
         isExpandSubmenu,
         handleModuleAction,
         verifyModuleVisibility,
+        verifyActionVisibility,
     } = useSidebarMenu(props);
 
 </script>
@@ -48,144 +49,157 @@
                 class="navbar-desktop"
                 :class="props.isSidebarCollapse ? 'collapse': 'no-collapse'"
             >
-            <template 
-                    v-for="(supermodule,index) in props.menu"
-                    :key="index"
-                >
-                <li     
-                    v-if="verifyModuleVisibility(supermodule)"
-                    class="supermodule-item" 
-                    @mouseleave="mouseLeaveHorizontal($event)"
-                    :class="[
-                        { 'active': supermodule.meta.dropdownOpen && supermodule.children?.length > 0 }
-                    ]"
+            <template
+                v-if="props.menu?.length > 0"
+            >
+                
+                <template 
+                        v-for="(supermodule,index) in props.menu"
+                        :key="index"
                     >
-                    <div 
-                        class="supitem-content" 
-                        :title="supermodule.meta.title"
-                        @mouseenter="mouseOverHorizontal($event)"
-                        @mousemove="mouseOverHorizontal($event)"
-                        @click="handleModuleAction(supermodule)"
+                    <li     
+                        v-if="verifyModuleVisibility(supermodule)"
+                        class="supermodule-item" 
+                        @mouseleave="mouseLeaveHorizontal($event)"
+                        :class="[
+                            { 'active': supermodule.meta.dropdownOpen && supermodule.children?.length > 0 }
+                        ]"
                         >
-                        <span class="material-symbols-rounded item-icon">{{ supermodule.meta.icon }}</span>
-                        <span class="item-title">{{ supermodule.meta.title }}</span>
-                        <div class="icon-expand-supermodule">
-                            <span 
-                                v-if="supermodule.children?.length > 0 && !props.isSidebarCollapse"
-                                class="material-symbols-rounded icon-expand"
-                                :class="isExpandSubmenu(supermodule.meta.dropdownOpen)"
-                                >
-                                expand_more
-                            </span>
-                            <span 
-                                v-else-if="supermodule.children?.length > 0 && props.isSidebarCollapse"
-                                class="material-symbols-rounded icon-expand"
-                                >
-                                arrow_right
-                            </span>
-                        </div>
-                    </div>
-                    <div 
-                        v-if="supermodule?.children?.length > 0"
-                        class="container-wrapper" 
-                    >
                         <div 
-                            class="wrapper wrapper-module">
-                            <ul class="sub-list">
-                                <template 
-                                    v-for="(moduleI,index) in supermodule.children"
-                                    :key="index"
-                                >
-                                    <li 
-                                        v-if="verifyModuleVisibility(moduleI)"
-                                        class="module-item"
-                                        @mouseleave="mouseLeaveVertical($event)"
-                                        :class="[
-                                            { 'active-sub': moduleI.meta?.dropdownOpen && moduleI?.children?.length > 0 }
-                                        ]"
+                            class="supitem-content" 
+                            :title="supermodule.meta.title"
+                            @mouseenter="mouseOverHorizontal($event)"
+                            @mousemove="mouseOverHorizontal($event)"
+                            @click="handleModuleAction(supermodule)"
+                            >
+                            <span class="material-symbols-rounded item-icon">{{ supermodule.meta.icon }}</span>
+                            <span class="item-title">{{ supermodule.meta.title }}</span>
+                            <div class="icon-expand-supermodule">
+                                <span 
+                                    v-if="verifyActionVisibility(supermodule) && !props.isSidebarCollapse"
+                                    class="material-symbols-rounded icon-expand"
+                                    :class="isExpandSubmenu(supermodule.meta.dropdownOpen)"
                                     >
-                                        <div 
-                                            @click="handleModuleAction(moduleI)"
-                                            class="item-content" 
-                                            :title="moduleI.meta.title"
-                                            @mousemove="mouseOverVertical($event)"
-                                            @mouseenter="mouseOverVertical($event)"
-                                            >
-                                            <span class="material-symbols-rounded">{{ moduleI.meta?.icon }}</span>
-                                            <span class="item-title">{{ moduleI.meta?.title }}</span>
-                                            <!-- <span 
-                                                v-if="moduleI?.children?.length > 0"
-                                                class="material-symbols-rounded icon-expand"
+                                    expand_more
+                                </span>
+                                <span 
+                                    v-else-if="verifyActionVisibility(supermodule) && props.isSidebarCollapse"
+                                    class="material-symbols-rounded icon-expand"
+                                    >
+                                    arrow_right
+                                </span>
+                            </div>
+                        </div>
+                        <div 
+                            v-if="supermodule?.children?.length > 0"
+                            class="container-wrapper" 
+                        >
+                            <div 
+                                class="wrapper wrapper-module">
+                                <ul class="sub-list">
+                                    <template 
+                                        v-for="(moduleI,index) in supermodule.children"
+                                        :key="index"
+                                    >
+                                        <li 
+                                            v-if="verifyModuleVisibility(moduleI)"
+                                            class="module-item"
+                                            @mouseleave="mouseLeaveVertical($event)"
+                                            :class="[
+                                                { 'active-sub': moduleI.meta?.dropdownOpen && moduleI?.children?.length > 0 }
+                                            ]"
+                                        >
+                                            <div 
+                                                @click="handleModuleAction(moduleI)"
+                                                class="item-content" 
+                                                :title="moduleI.meta.title"
+                                                @mousemove="mouseOverVertical($event)"
+                                                @mouseenter="mouseOverVertical($event)"
                                                 >
-                                                expand_more
-                                            </span> -->
-                                            <div class="icon-expand-module">
-                                                <span 
-                                                    v-if="moduleI?.children?.length > 0 && !props.isSidebarCollapse"
+                                                <span class="material-symbols-rounded item-icon">{{ moduleI.meta?.icon }}</span>
+                                                <span class="item-title">{{ moduleI.meta?.title }}</span>
+                                                <!-- <span 
+                                                    v-if="moduleI?.children?.length > 0"
                                                     class="material-symbols-rounded icon-expand"
-                                                    :class="isExpandSubmenu(moduleI.meta?.dropdownOpen)"
                                                     >
                                                     expand_more
-                                                </span>
-                                                <span 
-                                                    v-else-if="moduleI?.children?.length > 0 && props.isSidebarCollapse"
-                                                    class="material-symbols-rounded icon-expand"
-                                                    >
-                                                    arrow_right
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div 
-                                            v-if="moduleI?.children?.length > 0"
-                                            class="container-subwrapper"
-                                            >
-                                            <div 
-                                                class="wrapper wrapper-submodule"
-                                                >
-                                                <ul class="sub-list">
-                                                    <li 
-                                                        v-for="(subModuleI,index) in moduleI.children"
-                                                        :key="index"
-                                                        class="submodule-item"
+                                                </span> -->
+                                                <div class="icon-expand-module">
+                                                    <span 
+                                                        v-if="verifyActionVisibility(moduleI) && !props.isSidebarCollapse"
+                                                        class="material-symbols-rounded icon-expand"
+                                                        :class="isExpandSubmenu(moduleI.meta?.dropdownOpen)"
                                                         >
-                                                        <div 
-                                                            v-if="verifyModuleVisibility(subModuleI)"
-                                                            @click="handleModuleAction(subModuleI)"
-                                                            class="subitem-content" 
-                                                            :title="subModuleI.meta.title"
-                                                            @mousemove="mouseOverVertical($event)"
-                                                            @mouseenter="mouseOverVertical($event)"
-                                                            >
-                                                            <span class="material-symbols-rounded">{{ subModuleI.meta?.icon }}</span>
-                                                            <span class="item-title">{{ subModuleI.meta?.title }}</span>
-                                                            <!-- <span 
-                                                                v-if="subModuleI?.children?.length > 0"
-                                                                class="material-symbols-rounded icon-expand-submodule"
-                                                                >
-                                                                arrow_right
-                                                            </span> -->
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                        expand_more
+                                                    </span>
+                                                    <span 
+                                                        v-else-if="verifyActionVisibility(moduleI) && props.isSidebarCollapse"
+                                                        class="material-symbols-rounded icon-expand"
+                                                        >
+                                                        arrow_right
+                                                    </span>
+                                                </div>
                                             </div>
-                                            
-                                        </div>
+                                            <div 
+                                                v-if="moduleI?.children?.length > 0"
+                                                class="container-subwrapper"
+                                                >
+                                                <div 
+                                                    class="wrapper wrapper-submodule"
+                                                    >
+                                                    <ul class="sub-list">
+                                                        <li 
+                                                            v-for="(subModuleI,index) in moduleI.children"
+                                                            :key="index"
+                                                            class="submodule-item"
+                                                            >
+                                                            <div 
+                                                                v-if="verifyModuleVisibility(subModuleI)"
+                                                                @click="handleModuleAction(subModuleI)"
+                                                                class="subitem-content" 
+                                                                :title="subModuleI.meta.title"
+                                                                @mousemove="mouseOverVertical($event)"
+                                                                @mouseenter="mouseOverVertical($event)"
+                                                                >
+                                                                <span class="material-symbols-rounded item-icon">{{ subModuleI.meta?.icon }}</span>
+                                                                <span class="item-title">{{ subModuleI.meta?.title }}</span>
+                                                                <!-- <span 
+                                                                    v-if="subModuleI?.children?.length > 0"
+                                                                    class="material-symbols-rounded icon-expand-submodule"
+                                                                    >
+                                                                    arrow_right
+                                                                </span> -->
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                
+                                            </div>
 
-                                    </li>
-                                </template>
-                            </ul>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
 
-                </li>
+                    </li>
+                </template>
+
             </template>
-                <!-- <li class="supermodule-item" @mouseleave="mouseLeaveHorizontal($event)">
-                    <div class="supitem-content" @mousemove="mouseOverHorizontal($event)"
-                        @mouseout="mouseOverHorizontal($event)">
-                        <span class="material-symbols-rounded">manufacturing</span>
-                        <span>Configuración</span>
-                    </div>
-                </li> -->
+            <template
+                v-else
+            >
+                <div class="empty-items">
+                    No hay coincidencias
+                </div>
+            </template>
+            <!-- <li class="supermodule-item" @mouseleave="mouseLeaveHorizontal($event)">
+                <div class="supitem-content" @mousemove="mouseOverHorizontal($event)"
+                    @mouseout="mouseOverHorizontal($event)">
+                    <span class="material-symbols-rounded">manufacturing</span>
+                    <span>Configuración</span>
+                </div>
+            </li> -->
             </ul>
 
         </div>
@@ -195,6 +209,14 @@
 
 <style scoped>
     @import url('../css/sidebar-menu.css');
+
+    .empty-items{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 45px;
+    }
 
     .rotate{
         transform: rotate(180deg);

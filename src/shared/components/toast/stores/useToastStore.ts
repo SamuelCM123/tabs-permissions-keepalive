@@ -121,7 +121,9 @@ export const useToastStore = defineStore('Toast',() => {
         // console.log('toastContainer:',toastContainer!.clientHeight);
         // console.log('window.innerHeight:',window.innerHeight);
         // if((toastContainer.clientHeight + 500) > window.innerHeight){
-        if((toastContainer!.clientHeight + 200) > window.innerHeight){
+        if(!toastContainer) return false;
+
+        if((toastContainer?.clientHeight + 200) > window.innerHeight){
             await removeFirstToast();
 
             return true;

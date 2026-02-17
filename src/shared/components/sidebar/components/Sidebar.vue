@@ -16,10 +16,14 @@
         isSidebarCollapse,
         pathLogo,
         routes,
+        filteredRoutes,
+
+        // Methods
     } = storeToRefs(SideBarStore);
     const {
         collapseSidebar,
-        getItemModules
+        getItemModules,
+        filterItemRoutes,
     } = SideBarStore;
 
     // Componentes
@@ -54,32 +58,38 @@
         </SidebarLogo>
 
         <!-- TODO: Sección de Buscador de Componentes -->
-        <!-- <Transition>
+        <Transition>
 
             <div v-if="!isSidebarCollapse" class="wrapper-search">
                 
                 <div class="container-wrapper-general">
                     
-                    <div class="wrapper-input">
+                    <div class="general-wrapper">
 
-                        <input 
-                        placeholder="Buscar"
-                        class="input-form"
-                        type="text"
-                        >
                         
-                        <span class="material-symbols-rounded prefix-icon">search</span>
-
+                        <div class="wrapper-input">
+                            
+                            <input 
+                                placeholder="Buscar"
+                                class="input-form"
+                                type="text"
+                                @input="filterItemRoutes($event.target.value)"
+                            >
+                            
+                            <span class="material-symbols-rounded prefix-icon">search</span>
+                            
+                        </div>
+                        
                     </div>
 
                 </div>
                 
             </div>
 
-        </Transition> -->
+        </Transition>
         <SidebarMenu 
             :isSidebarCollapse="isSidebarCollapse"
-            :menu="routes"
+            :menu="filteredRoutes"
             >
         </SidebarMenu>
         
@@ -153,9 +163,9 @@
         padding-left: 40px;
         font-size: 13px;
         border-radius: 5px;
-        outline: .5px solid #EAEAEA;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
-        color: #000;
+        outline: .5px solid var(--color-f);
+        box-shadow: none;
+        color: var(--color-f);
         transition: outline .5s ease;
         font-weight: 400;
     }

@@ -21,7 +21,15 @@
         <div 
             class="container-content"
             :class="{'reside':SideBarStore.isSidebarCollapse}">
-            <Tabs></Tabs>
+            <Tabs>
+                <template #router-view>
+                    <router-view v-slot="{ Component, route }">
+                        <keep-alive>
+                            <component :is="Component" :key="String(route.query?.tabId)" />
+                        </keep-alive>
+                    </router-view>
+                </template>
+            </Tabs>
         </div>
         <!-- <div 
             class="container-content"
