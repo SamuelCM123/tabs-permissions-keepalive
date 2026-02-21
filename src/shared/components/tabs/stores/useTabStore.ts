@@ -1,5 +1,5 @@
 //* Importaciones
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/shared/stores/auth/useAuthStore.ts';
@@ -54,6 +54,8 @@ export const useTabStore = defineStore('Tabs',() => {
     let isPopState = ref(false);
     // let tabHistory = ref<any>([]);
 
+    const STORAGE_KEY = 'app_tabs_state';
+
     //? Desestructuraciones de Composables
     const { 
         //* Properties
@@ -76,6 +78,52 @@ export const useTabStore = defineStore('Tabs',() => {
     } = useDragTabs(openComponents);
 
     //* ACTIONS
+
+    // /**
+    //  * Guarda el estado de las pestañas en el almacenamiento local
+    //  * @function
+    //  * @name saveToStorage
+    //  * @returns {undefined}
+    //  */
+    // const saveToStorage = () => {
+    //     const data = {
+    //         openComponents: openComponents.value,
+    //         hiddenComponents: hiddenComponents.value,
+    //         layoutSelected: layoutSelected.value
+    //     };
+    //     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    // };
+
+    // /**
+    //  * Restaura el estado de las pestañas
+    //  * @function
+    //  * @name loadFromStorage
+    //  * @returns {undefined}
+    //  */
+    // const loadFromStorage = () => {
+    //     const stored = localStorage.getItem(STORAGE_KEY);
+    //     if (stored) {
+    //         try {
+    //             const parsed = JSON.parse(stored);
+    //             openComponents.value = parsed.openComponents || [];
+    //             hiddenComponents.value = parsed.hiddenComponents || [];
+    //             layoutSelected.value = parsed.layoutSelected || {};
+    //         } catch (e) {
+    //             console.error("Error al restaurar pestañas", e);
+    //         }
+    //     }
+    // };
+
+    // //? Observar cambios profundamente para guardar automáticamente
+    // watch(openComponents, () => saveToStorage(), { deep: true });
+    // watch(hiddenComponents, () => saveToStorage(), { deep: true });
+    // watch(layoutSelected, () => {
+    //     saveToStorage()
+    //     console.log('saveToStorage');
+    // }, { deep: true });
+
+    // //? Llamar a la carga al inicializar
+    // loadFromStorage();
 
     // TODO: Integrar funcionalidades globales para las pestañas
     /**
@@ -218,6 +266,13 @@ export const useTabStore = defineStore('Tabs',() => {
 
     }
 
+    /**
+     * Controla la selección de una opción del breadcrumb
+     * @function
+     * @name handleBreadcrumbLayout
+     * @param routeView - Ruta de la vista
+     * @returns {undefined}
+     */
     const handleBreadcrumbLayout = (routeView: any) => {
 
         console.log('routeView:', routeView);
@@ -239,6 +294,10 @@ export const useTabStore = defineStore('Tabs',() => {
 
     /**
      * Controla el despliegue de las pestañas que se repiten
+     * @function
+     * @name handleLayoutRepeat
+     * @param name - Nombre de la pestaña
+     * @returns {undefined}
      */
     const handleLayoutRepeat = async (name: any) => {
 
@@ -377,6 +436,7 @@ export const useTabStore = defineStore('Tabs',() => {
              * 7- Verificar que el número de pestaña no se repita
              */
 
+            console.log('llego');
             await handleDisplaceTabs();
         }
         catch (error) {
@@ -385,32 +445,107 @@ export const useTabStore = defineStore('Tabs',() => {
 
     }
 
-    const openTabByName = async (name: string, configTab?: any) => {
+    /**
+     * 
+     * @function
+     * @param name 
+     * @param config 
+     * @returns 
+     */
+    const openTabByNameUniversal = async (name: string, config: { params?: any, query?: any, title?: string } = {}) => {
 
-        try {
-            console.log('name:',name)
-            console.log('configTab:',configTab)
+        //* 1. Resolvemos la ruta para comparar
+        const resolved = router.resolve({ name, params: config.params });
+        
+        let validateRoute = await AuthStore.validatePermissions(resolved);
 
-            //? Genera un ID unico
-            let tabId = generateTabId();
+        if(!validateRoute) return;
 
-            //? Redirecciona a la vista
+        //* 2. BUSCAR DUPLICADOS
+        // Buscamos si ya existe una pestaña con el mismo nombre y los mismos parámetros
+        const existingTab = [...openComponents.value,...hiddenComponents.value].find((tab: any) => {
+            if (resolved.meta.isRepeat) return false;
+            
+            const sameName = tab.name === name;
+
+            console.log('params:',tab.params);
+            console.log('config:', config.params);
+            // Comparamos los parámetros (ej: si es el mismo ID de usuario)
+            // const sameParams = JSON.stringify(tab.params) === JSON.stringify(config.params || {});
+            // return sameName && sameParams;
+            return sameName;
+        });
+
+        // console.log('existingTab',existingTab);
+        
+        //? Verificar si se encontro la pestaña
+        if(existingTab){
+            layoutSelected.value = await handleLayoutRepeat(existingTab.name);
+
+            //? Redirige a la ruta seleccionada
             router.replace(
                 {
-                    name: name,
-                    query: { 
-                        tabId: tabId,
-                        ...configTab?.query
-                    },
-                    params: {...configTab?.params}
+                    name: layoutSelected.value.name,
+                    // query: route.meta.isRepeat ? { tabId: configTab.id } : {},
+                    query:{ ...config.query, tabId: existingTab.id },
+                    params: {...existingTab.params},
                 }
             );
+            return
+        }
 
+        // SI NO EXISTE: Procedemos a crearla
+        let tabNumberRepeat;
+        const tabId = generateTabId();
+        const newTab = {
+            id: tabId,
+            title: config.title || resolved.meta.title || 'Nueva Pestaña',
+            name: resolved.name,
+            path: resolved.path,
+            lastFullPath: resolved.fullPath,
+            tabHistory: [],
+            params: { ...config.params },
+            isAlwaysOpen: resolved.meta?.isAlwaysOpen || false,
+        };
+
+        //? Verificar y asignar el contador de las pestañas repetidas
+        // console.log('componentsRepeat.value:',componentsRepeat.value);
+        // componentsRepeat.value.hasOwnProperty(route.name) ? componentsRepeat.value[route.name]++ : componentsRepeat.value[route.name] = 0;
+        tabNumberRepeat = [...openComponents.value,...hiddenComponents.value].filter((tab: any) => resolved.name === tab.name);
+
+        //? Verificar y asignar el contador de las pestañas repetidas
+        // componentsRepeat.value[route.name] >  0 
+        // ? configTab.title = configTab.title + ' (' + componentsRepeat.value[route.name] + ')' 
+        // : '';
+        tabNumberRepeat.length > 0 ? newTab.title = newTab.title + ' (' + tabNumberRepeat.length + ')' : '';
+
+
+        // console.log('configTab:',configTab);
+        //? Verificar si hay pestañas fijas
+        let fixedTabs = openComponents.value.filter((tab: any) => tab.isAlwaysOpen);
+        // console.log('fixedTabs:',fixedTabs)
+
+        //? Almacena la ruta de la pestaña enfocada
+        layoutSelected.value = newTab;
+
+        if(fixedTabs.length > 0){
+            await openComponents.value.splice(fixedTabs.length, 0, newTab);
         }
-        catch (error) {
-            // console.log('error:',error);
+        else{
+            //? Almacena la ruta de la pestaña abierta
+            await openComponents.value.unshift(newTab);
         }
-    }
+
+        // openComponents.value.push(newTab);
+        // layoutSelected.value = newTab;
+
+        await router.replace({
+            path: resolved.fullPath,
+            query: { ...config.query, tabId }
+        });
+
+        await handleDisplaceTabs();
+    };
 
     const getTabById = (tabId: string) => {
         return openComponents.value.find((tab: any) => tab.id === tabId);
@@ -419,23 +554,28 @@ export const useTabStore = defineStore('Tabs',() => {
     // TODO: Verificar si sera necesario integrar un handler para abrir Supermodules, modules and submodules
 
     // CRÍTICO: Se ejecuta DESPUÉS de una navegación exitosa para guardar el destino.
-    router.afterEach((to) => {
-        // if(to.meta?.isAlwaysOpen) return;
+    // router.afterEach((to) => {
+    //     // if(to.meta?.isAlwaysOpen) return;
 
-        const tabId = to.query.tabId as string;
-        const tabToUpdate = openComponents.value.find((tab: any) => tab.id === tabId); 
+    //     const tabId = to.query.tabId as string;
+    //     const tabToUpdate = openComponents.value.find((tab: any) => tab.id === tabId); 
 
-        if (tabToUpdate) {
-            // Guarda la URL completa (incluye sub-ruta, params y queries)
-            tabToUpdate.lastFullPath = to.fullPath;
-        }
-    });
+    //     if (tabToUpdate) {
+    //         // Guarda la URL completa (incluye sub-ruta, params y queries)
+    //         tabToUpdate.lastFullPath = to.fullPath;
+    //     }
+    // });
 
     // TODO: Seguir con el almacenamiento de las rutas
-    // const pushToHistory = (id_tab: any, path: any) => {
-
-    //     // tab
-    // }
+    /**
+     * Agrega una ruta al historial de la pestaña actual (para el botón atrás)
+     */
+    const pushToTabHistory = (tabId: string, path: string) => {
+        const tab = openComponents.value.find((t: any) => t.id === tabId);
+        if (tab && path !== tab.lastFullPath) {
+            tab.tabHistory.push(tab.lastFullPath);
+        }
+    };
 
     // const repeatModule = async (route: any, configTab: any) => {
 
@@ -597,10 +737,11 @@ export const useTabStore = defineStore('Tabs',() => {
         handleBreadcrumbLayout,
         colorTab,
         openTab,
-        openTabByName,
+        openTabByNameUniversal,
         getTabById,
         closeTab,
         closeTabHidden,
+        pushToTabHistory,
 
         dragStart,
         dragEnd,

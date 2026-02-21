@@ -11,8 +11,7 @@
 
 <template>
     <div class="container">
-        <!-- Websocket Layout -->
-         <!-- TODO: Hacer uso de keep-alive -->
+        <!-- TODO: Hacer uso de keep-alive -->
         <router-view v-slot="{ Component }">
             <keep-alive>
                 <component 

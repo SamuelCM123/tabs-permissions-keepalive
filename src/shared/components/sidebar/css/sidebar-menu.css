@@ -61,7 +61,7 @@ li{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
+    width: auto;
 }
 
 .item-title{
@@ -107,7 +107,7 @@ li{
     position: relative;
     height: 100%;
     gap: 10px;
-    /* padding: 0px 40px 0px 20px; */
+    padding: 0px 40px 0px 10px;
     height: 45px;
     /* border-radius: 10px; */
     transition: all ease .3s;
@@ -279,7 +279,7 @@ li{
     display: flex;
     /* justify-content: center; */
     align-items: center;
-    padding: 0px 10px;
+    padding: 0px 20px;
     height: 45px;
     gap: 5px;
     cursor: pointer;
@@ -441,7 +441,7 @@ li{
 }
 
 .no-collapse .active-sub .container-subwrapper{
-    padding: 0px 10px;
+    /* padding: 0px 10px; */ /* TODO: REVISAR ESTO PARA EL TAMAÑO DE LA OPCION DEL MENU "WIDTH" */
     margin-bottom: 5px;
 }
 
