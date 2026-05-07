@@ -35,7 +35,7 @@ export const useSidebarMenu = (props: any) => {
         // console.log('divWrapper:', divWrapper);
     
         if (divWrapper) {
-            console.log('position:', position);
+            // console.log('position:', position);
     
             divWrapper.style.top = `${position.top - 75}px`;
             divWrapper.style.right = `${-150}px`;
@@ -53,11 +53,11 @@ export const useSidebarMenu = (props: any) => {
         let divWrapper = liElement.querySelector('.wrapper');
         let position = liElement.getBoundingClientRect()
     
-        console.log('e.target.parentElement:', position);
-        console.log('divWrapper:', divWrapper);
+        // console.log('e.target.parentElement:', position);
+        // console.log('divWrapper:', divWrapper);
     
         if (divWrapper) {
-            console.log('position:', position);
+            // console.log('position:', position);
     
             divWrapper.style.top = `${position.top - 75}px`;
             divWrapper.style.right = `${position.right}px`;
@@ -75,7 +75,7 @@ export const useSidebarMenu = (props: any) => {
         let position = liElement.getBoundingClientRect()
     
         if (divWrapper) {
-            console.log('position:', position);
+            // console.log('position:', position);
             // console.log('e.target:', e.target);
     
             divWrapper.style.top = `${position.top - 76.5}px`;
@@ -116,7 +116,7 @@ export const useSidebarMenu = (props: any) => {
     }
 
     const handleModuleAction = (item: any) => {
-        console.log('item:',item);
+        // console.log('item:',item);
 
         //? Verifica si tiene módulos a mostrar
         const response = verifyActionVisibility(item);

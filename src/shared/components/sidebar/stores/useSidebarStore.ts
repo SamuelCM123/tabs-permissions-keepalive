@@ -99,7 +99,7 @@ export const useSidebarStore = defineStore("Sidebar", () => {
    */
   const collapseSidebar = () => {
     isSidebarCollapse.value = !isSidebarCollapse.value;
-    console.log("isSidebarCollapse:", isSidebarCollapse.value);
+    // console.log("isSidebarCollapse:", isSidebarCollapse.value);
   };
 
   const getItemModules = () => {
@@ -108,7 +108,7 @@ export const useSidebarStore = defineStore("Sidebar", () => {
   };
 
   const filterItemRoutes = (keyword: string) => {
-    console.log('filtered keyword:',keyword);
+    // console.log('filtered keyword:',keyword);
 
     // TODO: Validar permisos del usuario por módulo o ruta
     const search = keyword.toLowerCase()

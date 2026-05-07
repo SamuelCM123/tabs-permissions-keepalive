@@ -1,5 +1,7 @@
-import socket from '@/services/sockets/socket.ts';
+// import socket from '@/services/sockets/socket.ts';
+import socketIO from '@/services/sockets/socket.io';
 import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts';
+// import { EncryptService } from '@/shared/helpers/encrypt/encrypt';
 
 // 1. Interfaces para los payloads de la aplicación
 // interface ChatMessagePayload {
@@ -11,11 +13,47 @@ import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts
 //     title: string;
 //     message: string;
 // }
-
-const socketService = {
-    init() {
+// const socketService = {
+//     init() {
         
-        socket.on('connected', () => {
+//         socket.on('connected', () => {
+//             const toastStore = useToastStore();
+//             toastStore.openToast({
+//                 title: 'Conexión Establecida',
+//                 message: 'Conectado exitosamente al servidor.',
+//                 type: 'success',
+//                 duration: 5000,
+//             });
+//         });
+
+//         socket.on('disconnected', () => {
+//             const toastStore = useToastStore();
+//             toastStore.openToast({
+//                 title: 'Desconectado',
+//                 message: 'Se ha perdido la conexión con el servidor.',
+//                 type: 'info',
+//                 duration: 5000,
+//             });
+//         });
+//     },
+
+//     // Métodos de alto nivel con tipado
+//     // onTicketCountChanged(message: string): void {
+//     //     socket.send({ type: 'on-ticket-count-changed', payload: { message } });
+//     // },
+
+//     onTicketCountChanged(callback: (payload: []) => void): void {
+//         socket.on('on-ticket-count-changed', callback);
+//     },
+
+//     onWorkingOnTicket(callback: (payload: []) => void): void {
+//         socket.on('on-working-on-ticket', callback);
+//     },
+// };
+
+const socketIoService = {
+    init() {
+        socketIO.socket?.on('connect', () => {
             const toastStore = useToastStore();
             toastStore.openToast({
                 title: 'Conexión Establecida',
@@ -23,9 +61,9 @@ const socketService = {
                 type: 'success',
                 duration: 5000,
             });
-        });
+        })
 
-        socket.on('disconnected', () => {
+        socketIO.socket?.on('disconnect', () => {
             const toastStore = useToastStore();
             toastStore.openToast({
                 title: 'Desconectado',
@@ -33,23 +71,21 @@ const socketService = {
                 type: 'info',
                 duration: 5000,
             });
-        });
+        })
+
     },
-
-    // Métodos de alto nivel con tipado
-    // onTicketCountChanged(message: string): void {
-    //     socket.send({ type: 'on-ticket-count-changed', payload: { message } });
-    // },
-
+    
     onTicketCountChanged(callback: (payload: []) => void): void {
-        socket.on('on-ticket-count-changed', callback);
+        socketIO.socket?.on('on-ticket-count-changed', callback);
     },
 
     onWorkingOnTicket(callback: (payload: []) => void): void {
-        socket.on('on-working-on-ticket', callback);
+        socketIO.socket?.on('on-working-on-ticket', callback);
     },
-};
+    
+}
 
-socketService.init();
+// socketService.init();
+socketIoService.init();
 
-export default socketService;
+export default socketIoService;

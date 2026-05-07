@@ -190,7 +190,7 @@ export const usePermissions = () => {
 
         //? Verifica si el usuario tiene permiso
         if(!hasPermission) {
-            console.log('aqui');
+            // console.log('aqui');
             //? Muestra el toast
             ToastStore.openToast({
                 title: 'Acceso denegado',

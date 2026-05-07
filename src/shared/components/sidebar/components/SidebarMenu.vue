@@ -228,6 +228,8 @@
         /* border: 2px solid black; */
         width: 100%;
         height: 100%;
+        /* padding-top: 50px; */
+        padding-bottom: 130px;
         /* background-color: var(--color-a); */
     }
 

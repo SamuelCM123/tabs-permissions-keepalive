@@ -1,5 +1,6 @@
 // TODO: NO SE ENCUENTRA EN USO
-import socket from './socket.ts';
+import socketIO from './socket.io';
+// import socket from './socket.ts';
 import { useToastStore } from '@/shared/components/toast/stores/useToastStore.ts';
 
 // 1. Interfaces para los payloads de la aplicación
@@ -16,7 +17,7 @@ interface NotificationPayload {
 const socketService = {
     init() {
         
-        socket.on('connected', () => {
+        socketIO.socket?.on('connected', () => {
             const toastStore = useToastStore();
             toastStore.openToast({
                 title: 'Conexión Establecida',
@@ -26,7 +27,7 @@ const socketService = {
             });
         });
 
-        socket.on('disconnected', () => {
+        socketIO.socket?.on('disconnected', () => {
             const toastStore = useToastStore();
             toastStore.openToast({
                 title: 'Desconectado',
@@ -39,15 +40,15 @@ const socketService = {
 
     // Métodos de alto nivel con tipado
     sendChatMessage(message: string): void {
-        socket.send({ type: 'chatMessage', payload: { message } });
+        socketIO.socket?.send({ type: 'chatMessage', payload: { message } });
     },
 
     onChatMessage(callback: (payload: ChatMessagePayload) => void): void {
-        socket.on<ChatMessagePayload>('chatMessage', callback);
+        socketIO.socket?.on('chatMessage', callback);
     },
 
     onNotification(callback: (payload: NotificationPayload) => void): void {
-        socket.on<NotificationPayload>('notification', callback);
+        socketIO.socket?.on('notification', callback);
     },
 };
 

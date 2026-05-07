@@ -26,7 +26,7 @@ export const saveLastPath = (router: any) => {
     });
 
     //? 2. GUARDIA DE NAVEGACIÓN
-    router.beforeEach((to: any, from: any, next: any) => {
+    router.beforeEach((to: any, from: any) => {
 
         // TODO: Controlar el despliegue de la pestaña de inicio
         // if(TabStore.openComponents.length === 0) {
@@ -36,7 +36,7 @@ export const saveLastPath = (router: any) => {
 
         //* Si es una navegación provocada por el botón atrás, ignoramos la lógica de registro
         if (TabStore.isPopState) {
-            return next();
+            return;
         }
 
         //* Obtiene los ID de la ruta actual(from) y la nueva(to)
@@ -51,19 +51,18 @@ export const saveLastPath = (router: any) => {
             const tab = TabStore.openComponents.find((t: any) => t.id === toTabId);
             if (tab) tab.lastFullPath = to.fullPath;
             
-            return next();
+            return;
         }
 
         //* Caso B: Si intentamos navegar a una ruta sin tabId pero venimos de una con tabId
         //* (Forzamos a que la nueva ruta se abra dentro de la pestaña actual)
         if (!toTabId && fromTabId) {
-            return next({
+            return {
                 ...to,
                 query: { ...to.query, tabId: fromTabId }
-            });
+            };
         }
 
-        next();
     });
 
     //? 3. ACTUALIZACIÓN POST-NAVEGACIÓN

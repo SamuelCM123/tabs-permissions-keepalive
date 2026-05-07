@@ -30,7 +30,7 @@
 
     // Ciclo de vida
     onMounted(() => {
-        console.log('monto desk');
+        // console.log('monto desk');
         loadInitialCount();
         // wsService.connect();
         // wsService.subscribe('on-ticket-count-changed', handleIncomingMessages);
@@ -41,9 +41,9 @@
     //     wsService.unsubscribe('on-ticket-count-changed');
     // })
 
-    watchEffect(() => {
-        console.log('props.id_desk:',props.id_desk);
-    })
+    // watchEffect(() => {
+    //     console.log('props.id_desk:',props.id_desk);
+    // })
 
 </script>
 
@@ -54,7 +54,7 @@
         <div class="row">
             <div class="wrapper-left">
                 <h4 class="title-header">Atendiendo a 
-                    <small v-if="workingTicket" class="text-primary">{{ workingTicket }}</small>
+                    <small v-if="workingTicket" class="text-primary">{{ workingTicket.number }}</small>
                     <small v-else class="text-primary">...</small>
                 </h4>
 

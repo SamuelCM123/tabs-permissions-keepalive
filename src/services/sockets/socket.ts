@@ -28,7 +28,7 @@ class WebSocketManager {
       return;
     }
 
-    this.ws = new WebSocket(WS_CONFIG.url);
+    this.ws = new WebSocket(WS_CONFIG.url_pure);
 
     this.ws.onopen = () => {
       console.log("WebSocket connected.");

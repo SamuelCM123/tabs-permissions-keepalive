@@ -48,8 +48,8 @@
     } = useSearch( emits, props );
 
     // Componentes 
-    const TooltipInput = defineAsyncComponent(() => import('@/shared/components/tooltips/components/TooltipInput.vue'));
-    const ButtonComplement = defineAsyncComponent(() => import('@/shared/components/buttons/components/ButtonComplement.vue'));
+    // const TooltipInput = defineAsyncComponent(() => import('@/shared/components/tooltips/components/TooltipInput.vue'));
+    // const ButtonComplement = defineAsyncComponent(() => import('@/shared/components/buttons/components/ButtonComplement.vue'));
 
     // Watchers
     watchEffect(() => {

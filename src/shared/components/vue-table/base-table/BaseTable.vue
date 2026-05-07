@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
     import { defineAsyncComponent } from 'vue';
 
     const TableForDesktop = defineAsyncComponent(() => import('@/shared/components/vue-table/components/TablerForDesktop.vue'));
@@ -14,4 +14,4 @@
 
 <style scoped>
 
-</style>
+</style> -->

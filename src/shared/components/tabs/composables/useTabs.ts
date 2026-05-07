@@ -76,12 +76,12 @@ export const useTabs = (openComponents: any, hiddenComponents: any) => {
             // console.log('sizeLeft:',sizeLeft.value);
             // Valida cuando se muestran las pestañas y cuando no
             if(sizeLeft.value < 0){
-                console.log('openComponents:',openComponents.value);
+                // console.log('openComponents:',openComponents.value);
                 // Valida que no se pueda ocultar la unica pestaña abierta
                 if(openComponents.value.length === 1) return
 
                 while(sizeLeft.value < 0){
-                    console.log('sizeLeft:',sizeLeft.value);
+                    // console.log('sizeLeft:',sizeLeft.value);
                     
                     // Calcula el espacio restante del contenedor general de pestañas
                     await calcSizeContainerTabs();
@@ -105,7 +105,7 @@ export const useTabs = (openComponents: any, hiddenComponents: any) => {
             //     message: 'Ha ocurrido un error al desplazar pestañas entre visualizables y ocultas',
             //     type: 'error',
             // })
-            console.log('error:',error);
+            // console.log('error:',error);
         }
     }
 

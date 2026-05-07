@@ -159,7 +159,7 @@ export const useTabStore = defineStore('Tabs',() => {
         hiddenComponents.value = [];
         // layout.value = null;
         // propsLayout.value = null;
-        console.log('closeAllTabs');
+        // console.log('closeAllTabs');
         router.replace({name: 'dashboard' });
     }
 
@@ -248,13 +248,13 @@ export const useTabStore = defineStore('Tabs',() => {
      */
     const handleLayout = (routeView: any) => {
 
-        console.log('routeView:', routeView);
+        // console.log('routeView:', routeView);
 
-        console.log('layoutSelected.value:', layoutSelected.value);
+        // console.log('layoutSelected.value:', layoutSelected.value);
 
         layoutSelected.value = routeView;
 
-        console.log('layoutSelected.value:', layoutSelected.value);
+        // console.log('layoutSelected.value:', layoutSelected.value);
 
         router.replace(
             {
@@ -275,12 +275,12 @@ export const useTabStore = defineStore('Tabs',() => {
      */
     const handleBreadcrumbLayout = (routeView: any) => {
 
-        console.log('routeView:', routeView);
-        console.log('routeView.id:', routeView.id);
+        // console.log('routeView:', routeView);
+        // console.log('routeView.id:', routeView.id);
         if(routeView.meta?.isBreadcrumb?.isSelected && (layoutSelected.value?.name != routeView.name)){
-            console.log('entro' );
-            console.log('layoutSelected.value:',layoutSelected.value);
-            console.log('openComponents.value:', openComponents.value);
+            // console.log('entro' );
+            // console.log('layoutSelected.value:',layoutSelected.value);
+            // console.log('openComponents.value:', openComponents.value);
             router.replace(
                 {
                     name: routeView.name,
@@ -289,7 +289,7 @@ export const useTabStore = defineStore('Tabs',() => {
                 }
             );
         }
-        console.log('routeView:', routeView);
+        // console.log('routeView:', routeView);
     }
 
     /**
@@ -311,7 +311,7 @@ export const useTabStore = defineStore('Tabs',() => {
         let isHiddenTab = await hiddenComponents.value.some((route: any) => route.name == name);
 
         if(moduleFind){
-            console.log('moduleFind:',moduleFind);
+            // console.log('moduleFind:',moduleFind);
 
             //? Verifica si la pestaña esta oculta para desplazarla a las abiertas
             if(isHiddenTab) {
@@ -334,7 +334,7 @@ export const useTabStore = defineStore('Tabs',() => {
         try{
             // console.log('openComponents:',openComponents.value);
             // console.log('hiddenComponents:',hiddenComponents.value);
-            console.log('route:',route);
+            // console.log('route:',route);
 
             /**
              // TODO: Validar lo necesario para desplegar la pestaña
@@ -436,7 +436,7 @@ export const useTabStore = defineStore('Tabs',() => {
              * 7- Verificar que el número de pestaña no se repita
              */
 
-            console.log('llego');
+            // console.log('llego');
             await handleDisplaceTabs();
         }
         catch (error) {
@@ -468,8 +468,8 @@ export const useTabStore = defineStore('Tabs',() => {
             
             const sameName = tab.name === name;
 
-            console.log('params:',tab.params);
-            console.log('config:', config.params);
+            // console.log('params:',tab.params);
+            // console.log('config:', config.params);
             // Comparamos los parámetros (ej: si es el mismo ID de usuario)
             // const sameParams = JSON.stringify(tab.params) === JSON.stringify(config.params || {});
             // return sameName && sameParams;
@@ -651,7 +651,7 @@ export const useTabStore = defineStore('Tabs',() => {
          */
 
         
-        console.log('openComponents.value.length:',openComponents.value.length);
+        // console.log('openComponents.value.length:',openComponents.value.length);
         
         //? Si hay más de una pestaña abierta
         if(openComponents.value.length > 0){
@@ -677,7 +677,7 @@ export const useTabStore = defineStore('Tabs',() => {
                 //? Seleccionar la nueva pestaña
                 layoutSelected.value = {...routesTemp};
 
-                console.log('routesVisible:',routesVisible);
+                // console.log('routesVisible:',routesVisible);
                 //? Redirigir a la nueva pestaña
                 router.replace({ 
                     // name: routesTemp.name,
@@ -702,7 +702,7 @@ export const useTabStore = defineStore('Tabs',() => {
      * Se manejara una forma diferente de mostrar las pestañas ocultas de acuerdo al enrutador
      */
     const closeTabHidden = async (routesHidden: any) => {
-        console.log('routesHidden:', routesHidden);
+        // console.log('routesHidden:', routesHidden);
         
         hiddenComponents.value = await hiddenComponents.value.filter((tab: any) => routesHidden.id != tab.id);
 

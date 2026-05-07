@@ -4,9 +4,9 @@
     import { onMounted } from 'vue';
     
 
-    onMounted(() => {
-        console.log('websockets montado');
-    })
+    // onMounted(() => {
+    //     console.log('websockets montado');
+    // })
 </script>
 
 <template>

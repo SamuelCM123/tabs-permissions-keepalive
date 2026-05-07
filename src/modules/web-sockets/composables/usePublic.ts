@@ -1,7 +1,8 @@
 //* Importaciones
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import { API_CONFIG } from '@/services/api/api.config.ts';
 import socket from '@/modules/web-sockets/composables/useServices.ts';
+// import { EncryptServiceGCM } from '@/shared/helpers/encrypt/encrypt';
 
 export const usePublic = () => {
 
@@ -11,7 +12,7 @@ export const usePublic = () => {
 
     //* PROPERTIES
     let ticketProcess = ref(null);
-    let ticketPending = ref([]);
+    let ticketPending: Ref<string[]> = ref([]);
 
     //* METHODS
 
@@ -31,14 +32,19 @@ export const usePublic = () => {
     }
     
 
-    const handleIncomingTicketWork = (data: []) => {
-        console.log('data:',data);
+    const handleIncomingTicketWork = (data: any) => {
+
+        // const encrypter = new EncryptServiceGCM().decrypt(data);
+
+        // const dataDecrypt = encrypter.decrypt();
+        // const jsonData: string[] = JSON.parse(dataDecrypt);
+        // console.log('data:',data);
         ticketPending.value = [];
         ticketPending.value = [...data];
     }
 
     onMounted(() => {
-        getTicketOnProcess();
+        // getTicketOnProcess();
         getTicketsPending();
         wsService.onWorkingOnTicket(handleIncomingTicketWork);
     })

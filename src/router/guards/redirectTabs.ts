@@ -10,7 +10,7 @@ let firstLoad = true;
  */
 export const redirectTabs = ( router: any ) => {
 
-    router.beforeEach( async (to:any,from:any,next:any) => {
+    router.beforeEach( async (to:any,from:any) => {
         
         // console.log('firstLoad:',firstLoad);
     
@@ -40,7 +40,6 @@ export const redirectTabs = ( router: any ) => {
             // }
         // }
         
-        next();
     });
 
 }

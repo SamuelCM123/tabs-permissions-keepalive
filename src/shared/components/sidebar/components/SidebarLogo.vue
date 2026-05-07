@@ -10,7 +10,7 @@
 
 <template>
     <div class="sidebar-logo">
-        <a><img src="../../../../assets/img/cistem.svg" height="50px" alt="Logo" class="logo"></a>
+        <a><img src="../../../../assets/img/cistem.svg" alt="Logo" class="logo"></a>
     </div>
 </template>
 
@@ -19,13 +19,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 83px;
+        min-height: 80px;
         width: 100%;
         user-select: none;
     }
 
     .logo { 
         width: 150px; 
+        height: 50px;
         opacity: 1;
         transition: all 1.5s ease;
     }

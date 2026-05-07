@@ -41,13 +41,13 @@
     border-radius: 5px;
     outline: .5px solid #EAEAEA;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
-    color: #000;
+    color: var(--color-f);
     transition: outline .5s ease;
     font-weight: 400;
 }
 
 .input-form::placeholder{
-    color: #A3A3A3;
+    color: var(--color-f);
 }
 
 .input-date{

@@ -21,9 +21,9 @@
     //     console.log("Cambié a la pestaña:", newId);
     //     // Aquí podrías cargar los datos específicos de esta pestaña desde tu store
     // }, { immediate: true });
-    onMounted(() => {
-        console.log('montado');
-    })
+    // onMounted(() => {
+    //     console.log('montado');
+    // })
 
 </script>
 

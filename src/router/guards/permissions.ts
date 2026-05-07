@@ -8,7 +8,7 @@ import { useAuthStore } from '@/shared/stores/auth/useAuthStore.ts';
  */
 export const permissions = ( router: any ) => {
 
-    router.beforeEach(( to: any,from: any,next: any ) => {
+    router.beforeEach(( to: any,from: any ) => {
 
         // console.log('to:',to);
         // console.log('from:',from);
@@ -16,39 +16,37 @@ export const permissions = ( router: any ) => {
         const AuthStore = useAuthStore();
 
         //? Validar que tenga permisos definidos
-        if(!to.meta?.permissions) return next();
+        // if(!to.meta?.permissions) return next();
 
         //? Obtener los permisos configurados del usuario
         let hasPermission = AuthStore.validatePermissions(to);
 
         //? Validar si el usuario tiene permiso para ingresar a la ruta
-        if(hasPermission){
+        // if(hasPermission){
             
-            // NOTE: Tiene permiso
-            return next();
+        //     // NOTE: Tiene permiso
+        //     return next();
             
-        }
+        // }
 
         //? Si no tiene permiso, redirige a la página anterior manteniendo el tabId
-        if (from.query.tabId) {
+        if (from.query.tabId && !hasPermission) {
 
             //? Busca si ya existe una pestaña abierta con el tabId de la RUTA DE DESTINO ('to')
             // let openTab = TabStore.openComponents.find((tab: any) => tab.id === to.query.tabId);
 
             // if(openTab) {
-            return next({ 
+            return { 
                 name: from.name,
                 params: {...from.params}, // Mantiene cualquier parámetro de ruta (si existe)
                 query: { 
                     ...from.query, // Mantiene cualquier otro query param
                     tabId: from.query.tabId // <-- ¡Aquí está la clave!
                 } 
-            });
+            };
                 
             // }
         }
-        
-        next();
 
     })
 

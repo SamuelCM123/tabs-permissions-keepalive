@@ -131,6 +131,8 @@
         height: 50px;
         width: 100%;
         padding: 10px;
+        /* margin-top: 80px; */
+        /* position: absolute; */
     }
 
     .container-wrapper-general {

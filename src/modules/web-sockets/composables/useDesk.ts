@@ -26,7 +26,7 @@ export const useDesk = () => {
     //* METHODS
 
     const loadInitialCount = async () => {
-        console.log('Route:',Route);
+        // console.log('Route:',Route);
         if(!Route.params.id_desk) return Router.push({ name: 'index' });
         id_desk.value = Route.params.id_desk;
         // console.log('id_desk:',id_desk.value);
@@ -82,7 +82,7 @@ export const useDesk = () => {
 
     const handleIncomingMessages = ( message: any ) => {
 
-        // console.log('message:',message);
+        console.log('message:',message);
         // let { type, message } = message;
         ticketPending.value = message;
 

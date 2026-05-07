@@ -44,13 +44,13 @@
                     <table>
                         <tbody>
 
-                            <tr v-for="(ticket, index) in ticketPending.slice(1, 4)" :key="index">
+                            <!-- <tr v-for="(ticket, index) in ticketPending?.slice(1, 4)" :key="index">
                                 <td>
                                     <span id="lbl-ticket-02" class="ticket-secondary">Ticket {{ ticket?.number }}</span>
                                     <br>
                                     <span id="lbl-desk-02">Escritorio {{ ticket?.handleAtDesk }}</span>
                                 </td>
-                            </tr>
+                            </tr> -->
                             <!-- <tr>
                                 <td>
                                     <span id="lbl-ticket-03" class="ticket-secondary">Ticket Y</span>

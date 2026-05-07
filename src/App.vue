@@ -37,7 +37,7 @@
 
 
   // Componentes
-  const BaseToast = defineAsyncComponent(() => import('@/shared/components/toast/components/Toast.vue'));
+  const BaseToast = defineAsyncComponent(() => import('./shared/components/toast/components/Toast.vue'));
 </script>
 
 <template>
