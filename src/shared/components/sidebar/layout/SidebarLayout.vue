@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
     // Importaciones Nativas
     import { defineAsyncComponent } from 'vue';

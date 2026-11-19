@@ -43,6 +43,7 @@ export const usePublic = () => {
         ticketPending.value = [...data];
     }
 
+    // TODO: Descomentar para utilizar el socket
     onMounted(() => {
         // getTicketOnProcess();
         getTicketsPending();

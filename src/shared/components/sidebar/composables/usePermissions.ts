@@ -50,7 +50,7 @@ export const usePermissions = () => {
                 "add": false,
                 "disable": null,
                 "edit": null,
-                "read": false
+                "read": true
             },
             "websocket_new_ticket": {
                 "add": null,

@@ -4,7 +4,7 @@
     import { useSidebarMenu } from '@/shared/components/sidebar/composables/useSidebarMenu.ts';
 
     // Importaciones de Stores
-    import { useTabStore } from '@/shared/components/tabs/stores/useTabStore.ts';
+    // import { useTabStore } from '@/shared/components/tabs/stores/useTabStore.ts';
 
     // Importaciones de Pinia
     import { storeToRefs } from 'pinia';
@@ -15,15 +15,15 @@
         isSidebarCollapse: {type:Boolean},
     });
 
-    // Desestructuraciones de Stores
-    const {
-        // Actions
-        openTab,
-    } = useTabStore();
+    // // Desestructuraciones de Stores
+    // const {
+    //     // Actions
+    //     openTab,
+    // } = useTabStore();
     
-    const {
+    // const {
         
-    } = storeToRefs(useTabStore());
+    // } = storeToRefs(useTabStore());
 
     // Desestructuraciones de Composables
     const {

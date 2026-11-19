@@ -9,7 +9,8 @@ export class SocketIoManager {
     private listeners: Record<string, WsCallback[]> = {};
 
     constructor() {
-        this.connect();
+        // TODO: Descomentar para implementar reconexion automatica y demás
+        // this.connect();
     }
 
     public connect(): void {

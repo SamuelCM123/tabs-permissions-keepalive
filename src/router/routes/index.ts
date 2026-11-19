@@ -487,6 +487,24 @@ export const routesSidebar: MyRouteRecordRaw[] = [
       },
     },
   },
+  {
+    path: "/qr-scanner",
+    name: "qr-scanner",
+    component: () =>
+      import("@/modules/qr-scanner/layouts/QrScannerLayout.vue"),
+    meta: {
+      title: "QR Scanner",
+      icon: "barcode_scanner",
+      keyword: ["websocket"],
+      dropdownOpen: false,
+      isShow: true,
+      keepAlive: true,
+      isBreadcrumb: {
+        isShow: false,
+        isSelected: false,
+      },
+    },
+  },
 ];
 
 export const routesView = <any>[

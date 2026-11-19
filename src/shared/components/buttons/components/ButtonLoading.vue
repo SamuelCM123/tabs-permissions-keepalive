@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
     // Importaciones Generales
     import { ref } from 'vue';
@@ -6,7 +6,7 @@
     // Definición de Props
     const props = defineProps({
         nameButton: {type:String},
-        actionButton: {type:[Promise,Function]},
+        actionButton: {type: Function},
         timeBtn: {type: Number, default: 1000},
         isDisabled: {type:null, default: false},
         background: {type: null, default: '#475097'},
@@ -16,10 +16,11 @@
         minWidth: {type: null, default: 'initial'},
         maxWidth: {type: null, default: 'initial'},
         height: {type: null, default: '50px'},
-        padding: {type: null, default: '0px 20px'},
+        padding: {type: null, default: '0px 0px'},
         isLoadingInactive: {type: null},
         icon: {type: null},
         iconSize: {type: null, default: '20px'},
+        letterSpacing: {type: null, default: '2px'},
     })
     
     /**
@@ -34,23 +35,38 @@
      * @returns {undefined}
      */
     const handleButtonAnimation = async () => {
-            
+        let startTime = 0;
+        let endTime = 0;
+        let duration = 0;
         // console.log('props.isDisabled:',props.isDisabled);
 
-        if(props.isLoadingInactive) return;
         if(props.isDisabled) return;
+        if(props.isLoadingInactive) return;
         if(stateButtonLoad.value) return;
 
         // Habilitar animación de carga en el botón
-        stateButtonLoad.value = true;
-
-        // Peticiones generales
-        if(props.actionButton ?? false) await props.actionButton();
         
-        // Deshabilitar animación de carga en el botón
-        setTimeout(() => {
-            stateButtonLoad.value = false
-        }, props.timeBtn|4000);
+        // Peticiones generales
+        const action = props.actionButton;
+        if (action) {
+            stateButtonLoad.value = true;
+            startTime = Date.now();
+            await action();
+            endTime = Date.now();
+            
+            duration = endTime - startTime;
+            
+            // console.log('duration:',duration);
+            // console.log('props.timeBtn - duration:',props.timeBtn - duration);
+            if(duration > props.timeBtn){
+                stateButtonLoad.value = false
+            }
+            else{
+                setTimeout(() => {
+                    stateButtonLoad.value = false
+                }, props.timeBtn - duration);
+            }
+        }
 
     }
 
@@ -75,7 +91,7 @@
                     </span>
                     <span v-else class="wrapper-btn-content white-s">
                         <span v-if="props.icon" class="material-symbols-rounded icon-btn">{{ props.icon }}</span>
-                        <span>{{ props.nameButton }}</span>
+                        <span class="text-btn">{{ props.nameButton }}</span>
                     </span>
             </Transition>
         </button>
@@ -98,7 +114,12 @@
     .wrapper-btn-content{
         display: flex;
         align-items: center;
+        transition: all .3s ease;
         gap: 5px;
+    }
+
+    .text-btn{
+        letter-spacing: v-bind(letterSpacing);
     }
 
     .icon-btn{
@@ -112,6 +133,7 @@
         max-width: v-bind(maxWidth);
         min-height: 45px;
         max-height: 50px;
+        border-radius: 5px;
     }
 
     .btn-form-lg{
@@ -123,7 +145,6 @@
         /* width: 400px; */
         color: #ffffff;
         font-size: 16px;
-        letter-spacing: 2px;
         cursor: pointer;
         text-transform: uppercase;
         width: v-bind(width);
@@ -136,15 +157,6 @@
         background-color: v-bind(background);
         box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.24);
         transition: all .3s ease;
-    }
-
-    .btn-loading{
-        cursor: not-allowed;
-        background-color: v-bind(background+'99');
-    }
-
-    .btn-loading:hover{
-        background-color: v-bind(background+'99') !important;
     }
 
     .btn-form-lg:hover{
@@ -190,7 +202,17 @@
         display: flex;
         width: 100%;
         height: 100%;
-        background-color: v-bind(bordebrColor + "99");
+        background-color: v-bind(borderColor + "99");
+        border-radius: 5px;
+    }
+
+    .btn-loading{
+        cursor: not-allowed;
+        background-color: v-bind(hoverColor + "99");
+    }
+
+    .btn-loading:hover{
+        background-color: v-bind(hoverColor +"99");
     }
 
     .icon-loading{
@@ -224,6 +246,11 @@
 
     /* Estilos para móviles con pantalla de hasta 460px */
     @media screen and (max-width: 460px) {
+
+        .wrapper-btn-content{
+            font-size: 13px;
+            transition: all .3s ease;
+        }
 
     }
 </style>

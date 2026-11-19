@@ -1,0 +1,26 @@
+{
+    "user": {
+        "id": "5",
+        "name": "Johan Garcia",
+        "points": 100
+    },
+    "reference": "1234567890",
+    "products": [
+        {
+            "id": "1",
+            "name": "Producto 1",
+            "points": 100
+        },
+        {
+            "id": "2",
+            "name": "Producto 2",
+            "points": 200
+        },
+        {
+            "id": "3",
+            "name": "Producto 3",
+            "points": 300
+        }
+    ],
+    "status": 1
+}
